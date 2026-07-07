@@ -1,0 +1,70 @@
+schema_version: "1.0.0"
+mission: "software-dev"
+profile: "comprehensive"
+answers:
+  project_intent: >
+    Proyecto académico de investigación para la recolección y procesamiento
+    de señales WiFi mediante Channel State Information (CSI) usando ESP32,
+    con una arquitectura de tres capas: emisor ESP32, receptor ESP32 y
+    servidor Flask. El objetivo es diseñar un pipeline de sanitización y
+    filtrado digital (compensación AGC, filtros Hampel/Butterworth/Savitzky-Golay,
+    sustracción de fondo) para detección de movimiento en espacios cerrados.
+  languages_frameworks: >
+    C++ (ESP-IDF v6.0.1) para firmware ESP32 en los roles active_sta,
+    active_ap y passive. Python (Flask, numpy, matplotlib) para el servidor
+    de borde y utilidades serial. LaTeX para reportes académicos.
+  testing_requirements: >
+    Sin framework de testing formal definido. El proyecto está en fase de
+    investigación académica. Las verificaciones son principalmente empíricas
+    mediante captura y análisis de datos CSI.
+  quality_gates: >
+    Calidad evaluada por correctitud funcional del firmware ESP32
+    (compilación con ESP-IDF, parpadeo de LED indicador, salida serial
+    correcta) y plausibilidad de los datos CSI capturados. No hay
+    gates automatizados definidos.
+  review_policy: >
+    Por definir. Actualmente no hay un proceso de revisión formal establecido.
+  performance_targets: >
+    Tasa de transmisión serial ≥ 921600 baudios. Captura y transmisión de
+    datos CSI en tiempo real sin bufferización excesiva. La compensación
+    AGC y filtrado multietapa en Flask debe aproximarse a tiempo real
+    para experimentos interactivos.
+  deployment_constraints: >
+    Dos (o más) dispositivos ESP32 físicos como hardware objetivo.
+    Servidor Flask ejecutándose en una computadora de borde conectada
+    por UART al receptor ESP32. Entorno de desarrollo Linux con
+    ESP-IDF v6.0.1 y Python 3.
+  documentation_policy: >
+    Documentación principal en LaTeX (reportes de avance y final).
+    README y AGENTS.md en markdown para orientación del equipo y
+    agentes de IA. El código fuente debe mantenerse autoexplicativo
+    con nombres de variables y funciones descriptivos.
+  risk_boundaries: >
+    Proyecto académico sin despliegue en producción. Los riesgos
+    principales son: (1) pérdida de paquetes CSI por saturación
+    serial, (2) no linealidades del hardware ESP32 que degraden
+    la señal, (3) ruido ambiental no filtrable que invalide la
+    detección de movimiento, (4) obsolescencia del fork de
+    ESP32-CSI-Tool ante cambios en ESP-IDF.
+  amendment_process: >
+    El charter se actualiza mediante entrevista con Spec Kitty
+    cuando cambien los requisitos del proyecto, se adopten nuevas
+    herramientas, o se identifiquen desviaciones de gobernanza.
+    Las enmiendas se registran en entrevistas adicionales y se
+    regenera el charter.
+  exception_policy: >
+    Las excepciones a la gobernanza se discuten en el equipo
+    académico y se documentan como decisiones de diseño en los
+    reportes LaTeX. Las excepciones técnicas (workarounds de
+    compatibilidad ESP-IDF, ajustes de parámetros CSI) se
+    registran en AGENTS.md.
+selected_paradigms: []
+selected_directives: []
+available_tools:
+  - "spec-kitty"
+  - "git"
+  - "idf.py"
+  - "python3"
+  - "pip"
+  - "cmake"
+  - "pdflatex"
