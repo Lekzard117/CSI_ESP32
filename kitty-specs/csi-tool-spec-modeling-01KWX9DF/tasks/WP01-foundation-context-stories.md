@@ -6,6 +6,8 @@ requirement_refs:
 - FR-001
 - FR-002
 - FR-003
+- FR-007
+- FR-008
 tracker_refs: []
 planning_base_branch: model-kitty-v1
 merge_target_branch: model-kitty-v1
