@@ -4,6 +4,8 @@
 LAYOUT_WITH_LEGEND()
 
 title System Context - ESP32 CSI Tool
+' Nota: La capa Flask (procesamiento de señales) será especificada en misión futura.
+' Este diagrama refleja SOLO el estado actual del firmware ESP32.
 
 Person(investigador, "Investigador Académico", "Usuario principal que configura, flashea y captura datos CSI")
 
@@ -16,6 +18,8 @@ System_Boundary(csi_system, "ESP32-CSI-Tool") {
 System(router, "WiFi Access Point", "Punto de acceso WiFi\n(red existente o active_ap)")
 System(pc_server, "Servidor de Borde", "PC que recibe datos CSI\npor serial a 921600 baudios")
 System(serial_tools, "Utilidades Python", "serial_append_time.py\nserial_plot_csi_live.py")
+
+System_Ext(flask_future, "Servidor Flask\n(Futuro)", "Pipeline de procesamiento CSI\nCompensación AGC, filtrado,\ndetección de movimiento\n— Fuera del alcance actual —")
 
 Rel(investigador, active_sta, "Configura y flashea firmware")
 Rel(investigador, active_ap, "Configura y flashea firmware")
@@ -30,6 +34,8 @@ Rel(passive, pc_server, "Envía datos CSI por serial", "UART 921600 baud")
 Rel(pc_server, serial_tools, "Procesa flujo serial", "CSV pipeline")
 
 Rel(investigador, pc_server, "Captura salida serial a archivo .csv")
+
+Rel(pc_server, flask_future, "Alimentará pipeline de\nprocesamiento (misión futura)", "Archivos .csv")
 
 SHOW_LEGEND()
 @enduml
