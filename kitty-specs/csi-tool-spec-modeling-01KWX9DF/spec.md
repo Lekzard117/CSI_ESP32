@@ -23,6 +23,71 @@ La capa de procesamiento de señales en el servidor Flask (compensación AGC, fi
 | subcarrier | subportadora | Cada una de las 52 o 114 portadoras individuales en una señal OFDM |
 | SSNR | — | Relación señal-subportadora a ruido para identificar subportadoras informativas |
 | 921600 baudios | — | Tasa de transmisión serial entre ESP32 y servidor de borde |
+| LLTF | — | Legacy Long Training Field: campo de entrenamiento de la preámbulo 802.11, usado para estimación de canal inicial (64 subportadoras) |
+| HT-LTF | — | High Throughput Long Training Field: campo de entrenamiento extendido para 802.11n |
+| I/Q interleaved | — | Formato de almacenamiento donde los valores imaginario (I) y real (Q) de cada subportadora se alternan en el buffer |
+| steady_clock | — | Reloj monotónico de C++ usado para timestamps precisos en el firmware |
+
+## Data Model: CSI Output Format
+
+Cada paquete CSI se serializa como una línea CSV con prefijo `CSI_DATA` y 26 campos separados por coma. Los primeros 25 campos son metadatos; el campo 26 contiene los valores crudos de las subportadoras.
+
+### Cabecera completa (orden posicional)
+
+```
+type,role,mac,rssi,rate,sig_mode,mcs,bandwidth,smoothing,not_sounding,aggregation,stbc,fec_coding,sgi,noise_floor,ampdu_cnt,channel,secondary_channel,local_timestamp,ant,sig_len,rx_state,real_time_set,real_timestamp,len,CSI_DATA
+```
+
+### Descripción de campos
+
+| # | Campo | Tipo | Rango/Valores | Descripción |
+|---|-------|------|---------------|-------------|
+| 1 | type | string | `CSI_DATA` | Prefijo fijo que identifica líneas CSI |
+| 2 | role | string | `STA`, `AP`, `PASSIVE` | Rol del firmware que capturó el paquete |
+| 3 | mac | string | `XX:XX:XX:XX:XX:XX` | Dirección MAC del dispositivo origen |
+| 4 | rssi | int8 | -90 a -20 dBm | Potencia de señal recibida |
+| 5 | rate | uint5 | 0-31 | Codificación de tasa PHY (non-HT) |
+| 6 | sig_mode | uint2 | 0=non-HT, 1=HT, 3=VHT | Protocolo de señalización |
+| 7 | mcs | uint7 | 0-76 | Modulation Coding Scheme |
+| 8 | bandwidth | uint1 | 0=20MHz, 1=40MHz | Ancho de banda del canal |
+| 9 | smoothing | uint1 | 0/1 | Suavizado de estimación de canal |
+| 10 | not_sounding | uint1 | 0/1 | Indicador de PPDU sounding |
+| 11 | aggregation | uint1 | 0=MPDU, 1=AMPDU | Tipo de agregación |
+| 12 | stbc | uint2 | 0/1 | Space-Time Block Code |
+| 13 | fec_coding | uint1 | 0/1 | Codificación FEC (LDPC) |
+| 14 | sgi | uint1 | 0=Long GI, 1=Short GI | Short Guard Interval |
+| 15 | noise_floor | int8 | dBm | Piso de ruido del módulo RF |
+| 16 | ampdu_cnt | uint8 | 0-255 | Subtramas agregadas en AMPDU |
+| 17 | channel | uint4 | 1-13 | Canal WiFi primario |
+| 18 | secondary_channel | uint4 | 0=none, 1=above, 2=below | Canal secundario |
+| 19 | local_timestamp | uint32 | microsegundos | Timer local ESP32 al recibir el paquete |
+| 20 | ant | uint1 | 0=ANT0, 1=ANT1 | Antena que recibió el paquete |
+| 21 | sig_len | uint12 | bytes | Longitud del paquete incluyendo FCS |
+| 22 | rx_state | uint8 | 0=ok, !=0=error | Estado de recepción del paquete |
+| 23 | real_time_set | bool | 0/1 | `1` si el reloj fue sincronizado vía SETTIME |
+| 24 | real_timestamp | double | segundos | Timestamp del reloj steady_clock |
+| 25 | len | uint16 | bytes | Longitud total del buffer CSI_DATA |
+| 26 | CSI_DATA | int8[] | `[I0 Q0 I1 Q1 ...]` | Valores I/Q interleaved de subportadoras |
+
+### Formato del campo CSI_DATA
+
+El buffer contiene valores **interleaved imaginary (I) y real (Q)** como `int8`:
+- Índice par (0, 2, 4, ...): componente imaginario
+- Índice impar (1, 3, 5, ...): componente real
+
+```
+buf = [I0, Q0, I1, Q1, I2, Q2, ..., In, Qn]
+```
+
+**Subportadoras**: Por defecto (LLTF-only, `CONFIG_SHOULD_COLLECT_ONLY_LLTF=y`) se obtienen 64 subcarriers = 128 valores int8. En modo completo (`LLTF + HT-LTF + STBC-HT-LTF`) se obtienen 192 subcarriers = 384 valores int8.
+
+De los 64 bins FFT, aproximadamente 52 son subportadoras activas (datos + pilotos). Las primeras y últimas posiciones corresponden a bandas de guarda.
+
+**Cálculo de amplitud y fase** desde los valores crudos:
+```
+amplitud[k] = sqrt(I[k]² + Q[k]²)
+fase[k]     = atan2(I[k], Q[k])
+```
 
 ## User Scenarios
 
@@ -30,7 +95,7 @@ La capa de procesamiento de señales en el servidor Flask (compensación AGC, fi
 
 **Actor principal**: Investigador académico
 
-**Trigger**: El investigador necesita capturar datos CSI en un entorno controlado para analizar patrones de movimiento.
+**Trigger**: El investigador necesita capturar datos CSI en un entorno cerrado para analizar patrones de movimiento.
 
 **Happy path**:
 1. El investigador configura dos ESP32: uno como active_sta y otro como active_ap
@@ -42,7 +107,7 @@ La capa de procesamiento de señales en el servidor Flask (compensación AGC, fi
 
 **Exception path — pérdida de paquetes**: Si el buffer serial se satura, algunos paquetes CSI se pierden; el sistema continúa transmitiendo sin bloqueo ni reintento.
 
-### Usuario con monitor pasivo
+### Usuario con monitor pasivo 
 
 **Actor principal**: Investigador académico
 
@@ -54,6 +119,8 @@ La capa de procesamiento de señales en el servidor Flask (compensación AGC, fi
 3. El ESP32 captura CSI en modo promiscuo de todos los paquetes en ese canal
 4. Los datos se transmiten por serial de la misma forma que en active_ap
 
+**Notes**: El investigador ya ha realizado el flasheo de los ESP32 para capturar CSI en modo promiscuo de todos los paquetes en ese canal, no descarta emplear el resto de escenarios, se usará aquel que mejor se ajuste a los objetivos planteados.
+
 ## Functional Requirements
 
 | ID | Description | Status |
@@ -61,7 +128,7 @@ La capa de procesamiento de señales en el servidor Flask (compensación AGC, fi
 | FR-001 | El firmware active_sta debe transmitir paquetes WiFi periódicamente en modo estación, conectándose a un AP configurado | Approved |
 | FR-002 | El firmware active_ap debe operar como punto de acceso WiFi, aceptar conexiones de estaciones y capturar CSI de los paquetes entrantes | Approved |
 | FR-003 | El firmware passive debe capturar CSI en modo promiscuo de todos los paquetes en un canal configurado, sin asociarse a ninguna red | Approved |
-| FR-004 | Cada línea CSI debe incluir: tipo, rol, MAC, RSSI, tasa, modo de señal, MCS, ancho de banda, timestamp local, número de antena, número de subportadoras y los valores complejos CSI | Approved |
+| FR-004 | Cada línea CSI debe incluir los 26 campos del modelo de datos definido: type, role, mac, rssi, rate, sig_mode, mcs, bandwidth, smoothing, not_sounding, aggregation, stbc, fec_coding, sgi, noise_floor, ampdu_cnt, channel, secondary_channel, local_timestamp, ant, sig_len, rx_state, real_time_set, real_timestamp, len y CSI_DATA (valores I/Q interleaved) | Approved |
 | FR-005 | Los datos CSI deben transmitirse por serial UART a 921600 baudios en formato CSV con prefijo `CSI_DATA` por línea | Approved |
 | FR-006 | El receptor (active_ap o passive) debe poder ser identificado por su dirección MAC en la salida CSI | Approved |
 | FR-007 | El timestamp del AP debe difundirse automáticamente a las estaciones conectadas para sincronización | Approved |
