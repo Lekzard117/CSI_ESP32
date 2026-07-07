@@ -1,7 +1,7 @@
 {
-  "event_count": 10,
-  "last_event_id": "01KWZ9KZTDEC1W51B467QH7BWN",
-  "materialized_at": "2026-07-07T22:01:47.597715+00:00",
+  "event_count": 11,
+  "last_event_id": "01KWZ9M4JNEDHA5CT67Y36BTSC",
+  "materialized_at": "2026-07-07T22:01:52.469557+00:00",
   "mission_number": "",
   "mission_slug": "csi-tool-spec-modeling-01KWX9DF",
   "mission_type": "software-dev",
@@ -11,18 +11,18 @@
     "canceled": 0,
     "claimed": 0,
     "done": 0,
-    "for_review": 1,
+    "for_review": 0,
     "in_progress": 0,
-    "in_review": 0,
+    "in_review": 1,
     "planned": 1
   },
   "work_packages": {
     "WP01": {
-      "actor": "opencode:unknown:curator-carla:implementer",
+      "actor": "opencode:unknown:curator-carla:reviewer",
       "force_count": 1,
-      "lane": "for_review",
-      "last_event_id": "01KWZ9KZTDEC1W51B467QH7BWN",
-      "last_transition_at": "2026-07-07T22:01:47.597715+00:00"
+      "lane": "in_review",
+      "last_event_id": "01KWZ9M4JNEDHA5CT67Y36BTSC",
+      "last_transition_at": "2026-07-07T22:01:52.469557+00:00"
     },
     "WP02": {
       "actor": "finalize-tasks",
