@@ -1,0 +1,1 @@
+/home/lekzard117/.agents/skills/spk-mission-tasks/SKILL.md

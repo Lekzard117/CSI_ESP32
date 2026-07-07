@@ -1,0 +1,1 @@
+/home/lekzard117/.agents/skills/spk-run-review-wp/SKILL.md

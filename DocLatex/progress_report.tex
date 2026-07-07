@@ -1,0 +1,213 @@
+\documentclass[12pt, a4paper]{article}
+% Paquetes esenciales
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{textcomp}
+\usepackage{parskip}
+\usepackage{setspace}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[skip=2pt,font=footnotesize,justification=centering]{caption}
+\usepackage{color}
+
+% Configuración de citas con biblatex (estilo IEEE)
+\usepackage[
+backend=biber,
+style=ieee,
+doi=true,
+url=false,
+isbn=false,
+eprint=false
+]{biblatex}
+
+\addbibresource{Literature.bib}
+
+% Configuración de hipervínculos
+\usepackage[
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    filecolor=blue,
+    urlcolor=blue
+]{hyperref}
+
+% Comandos personalizados
+\newcommand{\ie}{\emph{i.e.}\ }
+\newcommand{\eg}{\emph{e.g.}\ }
+\newcommand{\etal}{\emph{et al}}
+\newcommand{\sub}[1]{$_{\textrm{#1}}$}
+\newcommand{\super}[1]{$^{\textrm{#1}}$}
+\newcommand{\degC}{$^{\circ}$C}
+\newcommand{\wig}{$\sim$}
+\newcommand{\num}[2]{$#1\,$#2}
+\newcommand{\range}[3]{$#1$-$#2\,$#3}
+\newcommand{\roughly}[2]{$\sim\!#1\,$#2}
+\newcommand{\area}[3]{$#1 \! \times \! #2\,$#3}
+\newcommand{\vol}[4]{$#1 \! \times \! #2 \! \times \! #3\,$#4}
+\newcommand{\cube}[1]{$#1 \! \times \! #1 \! \times \! #1$}
+\newcommand{\figref}[1]{Figure~\ref{#1}}
+\newcommand{\eqnref}[1]{Equation~\ref{#1}}
+\newcommand{\tableref}[1]{Table~\ref{#1}}
+\newcommand{\secref}[1]{Section \ref{#1}}
+\newcommand{\XC}{\emph{exchange-correlation}}
+\newcommand{\abinit}{\emph{ab initio}}
+\newcommand{\Abinit}{\emph{Ab initio}}
+\newcommand{\Lonetwo}{L1$_{2}$}
+\newcommand{\Dznt}{D0$_{19}$}
+\newcommand{\Dtf}{D8$_{5}$}
+\newcommand{\Btwo}{B$_{2}$}
+\newcommand{\fcc}{\emph{fcc}}
+\newcommand{\hcp}{\emph{hcp}}
+\usepackage[colorlinks=true, linkcolor=blue, citecolor=blue, filecolor=blue, urlcolor=blue]{hyperref}
+\newcommand{\bcc}{\emph{bcc}}
+\newcommand{\Ang}{{\AA}}
+\newcommand{\inverseAng}{{\AA}$^{-1}$}
+\newcommand{\comment}[1]{\textcolor{red}{[COMMENT: #1]}}
+\newcommand{\more}{\textcolor{red}{[MORE]}}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+
+% Encabezados y pies de página
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{}
+\chead{}
+\rhead{}
+\lfoot{}
+\cfoot{\thepage{}}
+\rfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\begin{document}
+
+\onehalfspacing
+
+Fecha: \today{} \hfill{} Academic Project Manager: \\
+Proyectos Tecnológicos 1 \hfill{} Luis Chamba-Eras
+
+{\LARGE Recolección y Procesamiento de Señales WiFi mediante CSI para Detección de Movimiento.}
+
+{\Large Leonardo Augusto Peralta Sarango (leonardo.peralta@unl.edu.ec)}
+
+\vspace{0.4in}
+
+\singlespacing
+\tableofcontents
+
+\onehalfspacing
+
+\section{Línea y sublínea de investigación}
+Tecnologías de la Computación para la Innovación Tecnológica, Desarrollo Sostenible y la Transformación Digital
+\hspace{0.5cm}
+
+Sublinea 3.1 Internet de las Cosas (IoT) y Sistemas Ciber-físicos
+
+\section{Título}
+Arquitectura de Recolección y Procesamiento de Señales WiFi mediante CSI para Detección de Movimiento.
+
+\section{Planteamiento del problema técnico}
+
+De manera inicial los esfuerzos en la detección de movimiento de forma inalámbrica se basaron en el uso del Indicador de Fuerza de Señal Recibida (RSSI)\cite{wiesp}, sin embargo, el RSSI es una métrica de grano grueso, que mide unicamente la intensidad promedio de la señal sobre multiples trayectorias de propagacion lo que la vuelve extremadamente susceptible a fluctuaciones temporales y al desvanecimiento por múltiples trayectos, lo que resulta en errores de precisión de varios metros \cite{kim2026csi}\cite{avola2025transformer}\cite{mosefi22}.
+
+La Información del Estado del Canal (CSI) surge como una evolución necesaria que aprovecha la modulación OFDM (Orthogonal Frequency-Division Multiplexing) para subdividir el canal en múltiples subportadoras ortogonales, proporcionando una visión mucho más estable y descriptiva de la capa física (PHY) \cite{mykytyn2025channel} \cite{cominelli2023exposingcsisystematicinvestigation} \cite{yang2023sensefilibrarybenchmarkdeeplearningempowered}, otorgando un potencial para la inteligencia ambiental al permitir el reconocimiento de actividades humanas y la localización en interiores, aprovechando la infraestructura WiFi ya existente\cite{kim2026csi} \cite{barahimi2024context} \cite{custance2026why}. A diferencia de los sistemas basados en cámaras, con el CSI preserva la privacidad del usuario, funcionando en condiciones de total oscuridad \cite{avola2025transformer} \cite{geng2022denspose}.
+
+A pesar de una década de investigación, existe una brecha notable entre los prototipos de laboratorio y el despliegue real debido a la dependencia de hardware , como la tarjeta Intel 5300. Estas plataformas requieren controladores parcheados y sistemas operativos obsoletos, lo que crea una barrera de entrada para el uso práctico y masivo de la tecnología, además, los modelos actuales de alta complejidad, suelen ser computacionalmente prohibitivos para su ejecución en tiempo real en dispositivos de borde \cite{kim2026csi} \cite{wiesp}, a todo esto se suma la necesidad de requerir el procesamiento de datos en tiempo real al haber dependencia de servidores externos de alto rendimiento \cite{9900419}.
+
+El uso de microcontroladores de bajo costo como el ESP32 representa una alternativa accesible que proporciona información utilizable tanto de amplitud como de fase de las subportadoras \cite{chaudhari2026device}. No obstante, esta accesibilidad conlleva desafíos técnicos como la baja calidad de los datos generados en el convertidor analógico-digital (ADC) interno del ESP32 presenta una no linealidad significativa y es altamente susceptible al ruido térmico y electrónico, a esto se adiciona errores de hardware como el desplazamiento de la frecuencia central (CFO), el desplazamiento de frecuencia de muestreo (SFO), las distorsiones de reloj que provocan un flujo de datos crudos caotico e inestable \cite{9900419}. De igual manera las antenas internas estandar (PIFA) pueden tener una ganancia baja (2 dBi) lo cual incrementa la susceptibilidad al ruido limitando la capacidad de restringir el entorno de grabación \cite{strohmayer_wifi_2023}.
+
+La incapacidad actual para obtener detecciones precisas con dispositivos ESP32 radica en que sus mediciones están contaminadas por componentes de corriente continua (DC), las bandas de guarda inestables y las ráfagas de ruido esporádicas \cite{kim2026csi}.
+
+El ruido técnico del dispositivo de sus componentes de corriente continua (DC) se suma al ruido ambiental y por interferencias de otros equipos electrónicos, ocasionando que la precisión caiga drásticamente en condiciones de no línea de vista (NLOS) como el monitoreo a traves de obstaculos como paredes y entornos dinámicos \cite{kim2026csi}. De manera convencional, la tecnologia CSI enfrenta un problema de dispersion de energia en donde los movimientos sutiles se solapan por el ruido ambiental al haber una dispersion de energia del movimiento en todas las subportadoras \cite{kong2025cirsenserethinkingwifisensing}. Factores adicionales como el retraso fraccional introducen relaciones de tipo no lineal entre los datos recolectados y el movimiento real del objetivo complicando la obtencion de detecciones de alta resolucion sin modelado temporal avanzado \cite{kong2025cirsenserethinkingwifisensing}. Por lo tanto, sin un procesamiento especializado, es extremadamente difícil hacer distinción entre las distorsiones sutiles causadas por el movimiento humano y el ruido intrínseco del hardware \cite{kim2026csi} \cite{gaire2026staticsense}.
+
+Due to this, existe la necesidad técnica de desarrollar algoritmos de procesamiento de señales que mejoren la relación señal-ruido (SNR) del ESP32, esto mediante la implementacion de tuberías de preprocesamiento que incluyan filtrado de valores atípicos mediante el filtro de Hampel, la eliminacion de ruido de alta frecuencia con filtros de Butterworth y algoritmos de compensación de ganancia automática (AGC) para lograr una estabilización de la amplitud\cite{kim2026csi} \cite{yin2025ciuavmultitask3dindoor} \cite{gaire2026staticsense}.
+
+Solo mediante la resolución de estos inconvenientes de calidad de señal se podrá transformar el hardware de bajo costo en una herramienta de detección fiable y reproducible para aplicaciones reales como son el de seguridad, monitoreo o el area de la salud\cite{kim2026csi} \cite{yin2025ciuavmultitask3dindoor} \cite{chaudhari2026device}.
+
+\section{Pregunta de Investigación}
+
+¿Cual es el indice de mitigación del ruido tecnico de los dispositivos ESP32 que se logra con el procesamiento de la Información del Estado del Canal (CSI) en un servidor de borde (Flask) comparado con el uso de señales crudas empleadas para la deteccion de movimiento en espacios cerrados?
+
+\section{Objetivo General y Especificos}
+\subsection{Objetivo General}
+Diseñar una arquitectura de tres capas (emisores ESP32, receptor ESP32 y servidor Flask) para la recolección y procesamiento de Channel State Information (CSI) que integre un proceso de sanitización y filtrado digital en un servidor Flask para la detección de movimiento en espacios cerrados controlados.
+\subsection{Objetivos especificos}
+\begin{itemize}
+\item Implementar un nodo receptor ESP32 identificable por dirección MAC que capture CSI de paquetes provenientes de al menos un nodo emisor, transmitiendo los datos al servidor Flask a través de puerto serial a una tasa mayor o igual de 921600 baudios sin importar el indice de perdida de paquetes.
+\item Componer una línea de procesamiento en el servidor Flask que realice un refinamiento en la señal CSI mediante filtros Hampel y Butterworth, y aplique la sustracción de fondo estático junto con métricas de varianza móvil para identificar perturbaciones asociadas al movimiento humano.
+\end{itemize}
+
+\section{Actividades por objetivo}
+En base a los obejtivos especificos planteado se tienen las siguientes actividades
+\subsection{Actividades de Objetivo Especifico 1}
+\begin{itemize}
+\item \textbf{Configuracion de Firmware:} Flashear los dispositivos con el ESP32-CSI-Tool o Wi-ESP, configurando el nodo emisor en modo activo y el receptor en modo pasivo monitor, asegurando la asignación de roles mediante la dirección MAC.
+\item \textbf{Ajuste de la interfaz serial:} Configurar los parámetros del componente monitor y el puerto UART de consola del ESP32 a una tasa de 921600 baudios para evitar latencia en el flujo masivo de datos.
+\item \textbf{Desarrollo del Puente de Datos:} Programar un script en Python que lea el puerto serial, extraiga los campos de amplitud y fase de las subportadoras (típicamente 52 o 114) y los envíe de forma asíncrona al servidor Flask para su almacenamiento en formato CSV o MAT
+\end{itemize}
+
+\subsection{Actividades de Objetivo Especifico 2}
+\begin{itemize}
+\item \textbf{Satinización de la señal:} Implementar el filtro Hampel para la eliminación de valores atípicos en la amplitud y aplicar un filtro Butterworth de paso bajo (frecuencia de corte 10Hz) para eliminar el ruido de alta frecuencia ambiental.
+\item \textbf{Extracción del componente dinámico:} Desarrollar un algoritmo de sustracción de fondo estático que calcule un promedio móvil de la señal estable y lo reste de las mediciones actuales para aislar únicamente las variaciones causadas por el movimiento.
+\item \textbf{Lógica de detección de perturbaciones:} Establecer un umbral de decisión basado en la varianza móvil y la desviación estándar de la amplitud en las subportadoras más informativas para disparar una alerta de movimiento cuando la energía de la señal exceda la línea base del entorno vacío.
+\end{itemize}
+
+\section{Análisis de viabilidad y factibilidad del proyecto}
+\subsection{Factibilidad del proyecto}
+La factibilidad se centra en la capacidad técnica y operativa para llevar la propuesta a la práctica con los medios disponibles
+
+\begin{itemize}
+\item \textbf{Factibilidad Tecnica:} 
+
+El proyecto es realizable debido a la evolución de las métricas de monitoreo inalámbrico; mientras que el RSSI proporcionaba información de grano grueso susceptible a fluctuaciones\cite{chaudhari2026device} \cite{mosefi22}. el CSI permite capturar las variaciones detalladas en las subportadoras ortogonales del canal\cite{kong2025cirsenserethinkingwifisensing}, la arquitectura propuesta de tres capas, es compatible con marcos de trabajo probados que separan la captura en el borde del procesamiento centralizado\cite{kim2026csi}.
+
+La arquitectura posee la capacidad para integrar Machine Learning (ML) en el servidor Flask. El procesamiento previo (filtros Hampel y Butterworth) actúa como una etapa de sanitización esencial; la literatura demuestra que alimentar modelos de ML con datos crudos de ESP32 resulta en un rendimiento pobre EN UN APROX. 65\% , mientras que el preprocesamiento eleva la precisión por encimsa del 95\% \cite{kim2026csi}\cite{geng2022denspose}\cite{wiesp}
+
+\item \textbf{Hardware:} Se requieren únicamente dos nodos ESP32 y un ordenador convencional para el servidor Flask, lo que es significativamente más económico que sistemas LiDAR o Radar que superan los \$600 USD \cite{geng2022denspose}
+
+\item \textbf{Software:} Software: Se dispone de herramientas de código abierto como el ESP32-CSI-Tool, librerias Espressif para la extracción de datos y bibliotecas de Python para el procesamiento de señales y futura implementación de Deep Learning \cite{tong2024human}
+
+\item \textbf{Factibilidad de Gestión:}
+La arquitectura de tres capas La facilita una gestión modular del proyecto al haber separación de responsabilidades permite realizar pruebas unitarias en la captura de datos antes de integrarlas al servidor de procesamiento \cite{kim2026csi}. Se implementará un hub de comunicación centralizado (conexión serial de alta velocidad a 921600 baudios) para asegurar un flujo de datos constante y minimizar la latencia \cite{tong2024human} presentando asi una escalabilidad para permitir  añadir más nodos receptores para mejorar la cobertura sin reestructurar todo el sistema
+ \cite{kim2026csi}\cite{9900419}
+
+\item \textbf{Factibilidad de Recursos:}
+El uso del microcontrolador ESP32 reduce las barreras económicas. Mientras que el hardware especializado (como la tarjeta Intel 5300) requiere controladores obsoletos \cite{kim2026csi}\cite{cominelli2023exposingcsisystematicinvestigation} y sistemas complejos, el ESP32 es un dispositivo autónomo de bajo costo y ampliamente disponible \cite{tong2024human}
+
+\end{itemize}
+
+\subsection{Viabilidad del proyecto}
+Se evalúa la probabilidad de éxito estratégico, la pertinencia del proyecto y su sostenibilidad a largo plazo
+
+\begin{itemize}
+
+\item \textbf{Visión Estrategica:} 
+Se aborda la brecha entre los prototipos de laboratorio y el despliegue en el mundo real,para un mayor acceso a la tecnología de percepción ambiental\cite{kim2026csi}
+
+En comparación con las cámaras, el CSI no captura imágenes visuales, lo que lo hace ideal para entornos sensibles como hogares u hospitales\cite{geng2022denspose}\cite{9900419}, ademas der ser capaz de detectar movimiento en total oscuridad y a través de paredes (NLOS), superando las limitaciones de los sensores ópticos\cite{geng2022denspose}\cite{barahimi2024context}
+
+\item \textbf{Sotenibilidad:}
+La sostenibilidad se fundamenta en su bajo consumo energético (aprox. 500mW en operación continua) y su mínimo impacto ambiental al  reutilizar señales de radio ya existentes en el ambiente, no se introduce contaminación electromagnética adicional significativa\cite{custance2026why}\cite{kong2025cirsenserethinkingwifisensing}, el bajo costo de mantenimiento y la larga vida útil de los microcontroladores aseguran que el sistema sea viable para aplicaciones de monitoreo  y seguridad a largo plazo en espacios cerrados\cite{tong2024human}.
+
+
+\item \textbf{Criterio Tecnologico:} 
+ El uso de filtros matemáticos tradicionales en primera instancia permite atenuar el ruido técnico intrínseco del hardware (como la no linealidad del ADC y el ruido térmico)\cite{kim2026csi}\cite{kong2025cirsenserethinkingwifisensing}.
+ La estabilizada la señal, la arquitectura está preparada tecnológica para la transición hacia modelos de aprendizaje profundo que pueden ejecutarse de forma eficiente, incluso en dispositivos con recursos limitados mediante técnicas de cuantización \cite{kim2026csi}\cite{yang2023sensefilibrarybenchmarkdeeplearningempowered}\cite{9900419}.
+
+\item \textbf{Gestion de Riesgos:}
+Se han identificado riesgos críticos con sus respectivas estrategias de mitigación:
+\item \textbf{Baja relacion Señal-Ruido (SNR):} El ruido intrínseco del ESP32 se mitigará mediante el pipeline de preprocesamiento propuesto (Butterworth, Hampel y sustracción de fondo)\cite{kim2026csi} \cite{gaire2026staticsense} \cite{avola2025transformer}
+\item \textbf{Multipath Clutter:} Las interferencias ambientales se abordarán mediante la selección de subportadoras más informativas y la sustracción de la línea base estática\cite{gaire2026staticsense}\cite{mosefi22}
+\item \textbf{Incosistencia de Datos:} La implementación de una tasa de transferencia elevada (921600 baudios) previene la pérdida de paquetes y asegura que el servidor reciba información suficiente para un análisis preciso
+
+
+\end{itemize}
+
+% Bibliografía con biblatex estilo IEEE
+\printbibliography
+\end{document}

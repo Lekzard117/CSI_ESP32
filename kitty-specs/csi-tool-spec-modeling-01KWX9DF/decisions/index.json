@@ -1,0 +1,54 @@
+{
+  "entries": [
+    {
+      "created_at": "2026-07-07T19:24:39.985252Z",
+      "decision_id": "01KWZ0M95HJ2YKB004DRNW6S0P",
+      "final_answer": "full-26-field-spec",
+      "input_key": "fr004_data_model",
+      "mission_id": "01KWX9DFNGHEXCE4GJD098KP31",
+      "mission_slug": "csi-tool-spec-modeling-01KWX9DF",
+      "opened_by": "cli",
+      "options": [
+        "full-26-field-spec",
+        "grouped-field-description",
+        "custom"
+      ],
+      "origin_flow": "specify",
+      "other_answer": false,
+      "question": "How should FR-004 describe the CSI data model?",
+      "rationale": null,
+      "resolved_at": "2026-07-07T20:30:26.566557Z",
+      "resolved_by": null,
+      "slot_key": "specify.fr004.data-model",
+      "status": "resolved",
+      "step_id": null,
+      "summary_json": null
+    },
+    {
+      "created_at": "2026-07-07T21:13:15.035164Z",
+      "decision_id": "01KWZ6V3GVBQR1PDERNMZWE8GG",
+      "final_answer": "models-v1 directory at repo root",
+      "input_key": "diagrams_location",
+      "mission_id": "01KWX9DFNGHEXCE4GJD098KP31",
+      "mission_slug": "csi-tool-spec-modeling-01KWX9DF",
+      "opened_by": "cli",
+      "options": [
+        "kitty-specs/diagrams",
+        "DocLatex/diagrams",
+        "repo-root/diagrams"
+      ],
+      "origin_flow": "plan",
+      "other_answer": false,
+      "question": "Where should PlantUML diagrams be stored?",
+      "rationale": null,
+      "resolved_at": "2026-07-07T21:21:39.184057Z",
+      "resolved_by": null,
+      "slot_key": "plan.diagrams.location",
+      "status": "resolved",
+      "step_id": null,
+      "summary_json": null
+    }
+  ],
+  "mission_id": "01KWX9DFNGHEXCE4GJD098KP31",
+  "version": 1
+}

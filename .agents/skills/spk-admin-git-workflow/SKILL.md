@@ -1,0 +1,1 @@
+/home/lekzard117/.agents/skills/spk-admin-git-workflow/SKILL.md

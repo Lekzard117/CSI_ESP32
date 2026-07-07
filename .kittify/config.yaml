@@ -1,0 +1,12 @@
+project:
+  uuid: e2572671-8abe-41ad-83dc-aa6a94397c71
+  slug: csi-esp
+  node_id: e78b06fd9282
+  build_id: 87e2ac59-e01d-4be0-8631-2d818c2522d5
+vcs:
+  type: git
+agents:
+  available:
+  - opencode
+  auto_commit: true
+  lint_on_edit: false

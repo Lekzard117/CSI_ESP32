@@ -1,0 +1,1 @@
+/home/lekzard117/.agents/skills/spec-kitty-setup-doctor/references/common-failure-signatures.md
