@@ -52,7 +52,7 @@
 
 **Included subtasks**:
 - [x] T003 Create use case diagram (`use-case-diagram.puml`) for DD-002
-- [ ] T005 Create sequence diagrams (`sequence-diagrams.puml`) for DD-004
+- [x] T005 Create sequence diagrams (`sequence-diagrams.puml`) for DD-004
 - [ ] T006 Create CIM requirements model (`cim-requirements-model.puml`) for DD-005
 
 **Implementation notes**:
