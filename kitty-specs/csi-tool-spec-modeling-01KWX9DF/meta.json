@@ -1,0 +1,13 @@
+{
+  "created_at": "2026-07-07T03:19:45.584758+00:00",
+  "friendly_name": "ESP32-CSI-Tool: specification and modeling",
+  "mission_id": "01KWX9DFNGHEXCE4GJD098KP31",
+  "mission_number": null,
+  "mission_slug": "csi-tool-spec-modeling-01KWX9DF",
+  "mission_type": "software-dev",
+  "pr_bound": true,
+  "purpose_context": "Esta misión define la especificación, documentación y modelado de la capa ESP32-CSI-Tool, cubriendo los roles de transmisor activo (active_sta), receptor activo (active_ap) y monitor pasivo (passive). Incluye modelos C4 de contexto, diagramas de casos de uso, historias de usuario y diagramas de secuencia en PlantUML. La capa de procesamiento Flask se especificará en misiones posteriores.",
+  "purpose_tldr": "Especificar y documentar los tres roles de firmware ESP32 (active_sta, active_ap, passive) del sistema de detección de movimiento CSI",
+  "slug": "csi-tool-spec-modeling-01KWX9DF",
+  "target_branch": "model-kitty-v1"
+}
