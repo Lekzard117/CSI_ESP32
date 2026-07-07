@@ -56,7 +56,11 @@ template_set: software-dev-default
 
 ## Project Directives
 
-1. Respect risk boundaries: Proyecto académico sin despliegue en producción. Los riesgos principales son: (1) pérdida de paquetes CSI por saturación serial, (2) no linealidades del hardware ESP32 que degraden la señal, (3) ruido ambiental no filtrable que invalide la detección de movimiento, (4) obsolescencia del fork de ESP32-CSI-Tool ante cambios en ESP-IDF.
+1. Respect risk boundaries: Proyecto académico sin despliegue en producción. Los riesgos principales son: 
+    (1) pérdida de paquetes CSI por saturación serial, 
+    (2) no linealidades del hardware ESP32 que degraden la señal, 
+    (3) ruido ambiental no filtrable que invalide la detección de movimiento, 
+    (4) obsolescencia del fork de ESP32-CSI-Tool ante cambios en ESP-IDF.
 
 2. Keep documentation synchronized with workflow and behavior changes.
 
