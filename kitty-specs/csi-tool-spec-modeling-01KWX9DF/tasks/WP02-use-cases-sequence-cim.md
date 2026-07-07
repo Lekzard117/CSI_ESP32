@@ -17,7 +17,8 @@ subtasks:
 - T003
 - T005
 - T006
-agent: opencode
+agent: "opencode:unknown:curator-carla:implementer"
+shell_pid: "20299"
 history:
 - timestamp: '2026-07-07T21:26:29Z'
   event: created
@@ -224,3 +225,7 @@ No aplica. Artefactos de documentación. Validación visual y de correctitud sem
 - Los diagramas de secuencia pueden ser demasiado detallados (caer en PSM). Mantener nivel CIM/PIM
 - El modelo CIM puede confundirse con un diagrama de clases técnico. Reforzar que es conceptual
 - Dependencia de WP01 para la estructura de directorio `models-v1/`
+
+## Activity Log
+
+- 2026-07-07T22:02:31Z – opencode:unknown:curator-carla:implementer – shell_pid=20299 – Started implementation via action command
