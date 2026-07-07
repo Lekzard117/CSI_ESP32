@@ -96,6 +96,26 @@ idf.py monitor | python ../python_utils/serial_plot_csi_live.py
 - Manual: escribir `SETTIME:<unix_seconds>` en `idf.py monitor` y Enter
 - Tubería a través de `serial_append_time.py` añade timestamps de la PC local
 
+## Hardware disponible
+
+Estado actual (reportado 2026-07-07):
+- **ESP32 #1**: Operativo — puede flashearse sin problemas
+- **ESP32 #2**: Operativo — puede flashearse sin problemas
+- **ESP32 #3**: Defectuoso — problemas de respuesta, por determinar si es recuperable
+
+### Implicaciones en la arquitectura
+
+Con solo 2 dispositivos ESP32 funcionales no se pueden ocupar los 3 roles (active_sta, active_ap, passive) simultáneamente en hardware dedicado. Las configuraciones viables son:
+
+| Configuración | Dispositivo A | Dispositivo B | Generador de tráfico |
+|---|---|---|---|
+| TX/RX clásico | active_sta | active_ap | El propio active_sta |
+| AP + externo | active_ap | — | Smartphone u otro dispositivo WiFi |
+| Promiscuo | passive | — | Smartphone u otro dispositivo WiFi |
+| TX + monitor | active_sta | passive | El propio active_sta |
+
+Un smartphone puede generar tráfico WiFi que el modo `passive` capture en modo promiscuo, lo cual es un setup válido y común en investigación CSI. Esto no requiere un emisor ESP32 dedicado.
+
 ## Notas
 
 - `active_sta` aún incluye `#include "esp_spi_flash.h"` — puede necesitar la misma correción que `active_ap` y `passive`
