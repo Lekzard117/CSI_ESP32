@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "mission_slug": "csi-tool-spec-modeling-01KWX9DF",
+  "mission_id": "01KWX9DFNGHEXCE4GJD098KP31",
+  "mission_branch": "kitty/mission-csi-tool-spec-modeling-01KWX9DF",
+  "target_branch": "model-kitty-v1",
+  "lanes": [
+    {
+      "lane_id": "lane-planning",
+      "wp_ids": [
+        "WP01",
+        "WP02"
+      ],
+      "write_scope": [
+        "models-v1/c4-context-diagram.puml",
+        "models-v1/cim-requirements-model.puml",
+        "models-v1/sequence-diagrams.puml",
+        "models-v1/use-case-diagram.puml",
+        "models-v1/user-stories.md"
+      ],
+      "predicted_surfaces": [
+        "planning"
+      ],
+      "depends_on_lanes": [],
+      "parallel_group": 0
+    }
+  ],
+  "computed_at": "2026-07-07T21:29:23.396485+00:00",
+  "computed_from": "dependency_graph+ownership",
+  "planning_artifact_wps": [
+    "WP01",
+    "WP02"
+  ]
+}

@@ -11,7 +11,7 @@ requirement_refs:
 tracker_refs: []
 planning_base_branch: model-kitty-v1
 merge_target_branch: model-kitty-v1
-branch_strategy: PR to master
+branch_strategy: Planning artifacts for this mission were generated on model-kitty-v1. During /spec-kitty.implement this WP may branch from a dependency-specific base, but completed changes must merge back into model-kitty-v1 unless the human explicitly redirects the landing branch.
 subtasks:
 - T001
 - T002
@@ -22,7 +22,9 @@ history:
   event: created
 agent_profile: curator-carla
 authoritative_surface: models-v1/
-create_intent: []
+create_intent:
+  - models-v1/c4-context-diagram.puml
+  - models-v1/user-stories.md
 execution_mode: planning_artifact
 owned_files:
 - models-v1/c4-context-diagram.puml
