@@ -28,3 +28,4 @@
 .kittify/runtime/
 .kittify/sync-state.json
 .kittify/workspaces/
+ESP32-CSI-Tool
