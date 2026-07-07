@@ -53,7 +53,7 @@
 **Included subtasks**:
 - [x] T003 Create use case diagram (`use-case-diagram.puml`) for DD-002
 - [x] T005 Create sequence diagrams (`sequence-diagrams.puml`) for DD-004
-- [ ] T006 Create CIM requirements model (`cim-requirements-model.puml`) for DD-005
+- [x] T006 Create CIM requirements model (`cim-requirements-model.puml`) for DD-005
 
 **Implementation notes**:
 1. T003: Actor "Investigador" con casos de uso para active_sta (transmitir paquetes), active_ap (recibir CSI como AP), passive (monitorear canal promiscuo)
