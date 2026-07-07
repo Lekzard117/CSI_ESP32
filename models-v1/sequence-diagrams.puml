@@ -1,0 +1,76 @@
+@startuml ESP32-CSI-Tool - Sequence Diagram: active_sta → active_ap
+
+title Captura CSI: Emisor activo → Receptor AP
+
+participant "active_sta\n(ESP32 TX)" as sta
+participant "WiFi Channel" as channel
+participant "active_ap\n(ESP32 RX)" as ap
+participant "UART Serial" as serial
+participant "Servidor\nde Borde (PC)" as pc
+
+== Inicialización ==
+ap -> ap: WiFi softAP iniciado\n(modo AP, canal configurado)
+sta -> sta: WiFi station iniciado
+
+sta -> channel: Se conecta al SSID del AP
+channel -> ap: Solicitud de conexión
+ap -> channel: Asocia estación
+sta -> channel: Conexión establecida
+
+== Captura CSI ==
+loop Intervalo de transmisión
+  sta -> channel: Envía paquete WiFi (802.11n/g)
+  channel -> ap: Paquete recibido por el AP
+
+  ap -> ap: Estimación de canal desde\nLLTF/HT-LTF del preámbulo
+  ap -> ap: Extrae CSI:\n  - Metadatos (MAC, RSSI, MCS, etc.)\n  - Valores I/Q interleaved\n    (64 o 192 subportadoras)
+  ap -> ap: Serializa línea CSV:\n  "CSI_DATA,AP,<mac>,<rssi>,..."
+
+  ap -> serial: Envía línea CSV\n(921600 baud)
+  serial -> pc: "CSI_DATA,AP,AA:BB:CC:DD:EE:FF,-65,..."
+
+  pc -> pc: (Opcional) Almacena a .csv\no procesa con scripts Python
+end
+
+== Sincronización temporal (opcional) ==
+pc -> serial: "SETTIME:<unix_seconds>"
+serial -> ap: Comando recibido por UART
+ap -> ap: Ajusta real_timestamp interno
+pc -> serial: "SETTIME:1712345678"
+ap -> ap: real_time_set = 1
+
+@enduml
+
+
+@startuml ESP32-CSI-Tool - Sequence Diagram: passive monitor
+
+title Captura CSI: Monitor pasivo
+
+participant "WiFi Dispositivo A\n(ej. router, celular)" as dev_a
+participant "WiFi Dispositivo B\n(ej. laptop)" as dev_b
+participant "WiFi Channel" as channel
+participant "passive\n(ESP32 monitor)" as passive
+participant "UART Serial" as serial
+participant "Servidor\n de Borde (PC)" as pc
+
+== Inicialización ==
+passive -> passive: WiFi configurado en modo promiscuo\n(canal fijo, sin asociación)
+
+== Captura pasiva ==
+loop Cada paquete en el canal
+  dev_a -> channel: Transmite paquete WiFi
+  channel -> passive: Paquete capturado\n(modo monitor/promiscuo)
+
+  passive -> passive: Extrae CSI del preámbulo\n  (misma rutina que active_ap)
+  passive -> passive: Serializa línea CSV:\n  "CSI_DATA,PASSIVE,<mac_origen>,..."
+
+  passive -> serial: Envía línea CSV\n(921600 baud)
+  serial -> pc: "CSI_DATA,PASSIVE,AA:BB:CC:11:22:33,-70,..."
+
+  dev_b -> channel: Transmite paquete WiFi
+  channel -> passive: Paquete capturado
+  passive -> serial: "CSI_DATA,PASSIVE,DD:EE:FF:44:55:66,-72,..."
+  serial -> pc: Recibe línea
+end
+
+@enduml

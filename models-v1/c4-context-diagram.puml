@@ -1,0 +1,35 @@
+@startuml ESP32-CSI-Tool - C4 Context Diagram
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+title System Context - ESP32 CSI Tool
+
+Person(investigador, "Investigador Académico", "Usuario principal que configura, flashea y captura datos CSI")
+
+System_Boundary(csi_system, "ESP32-CSI-Tool") {
+    System(active_sta, "active_sta", "Firmware emisor WiFi\nModo estación\nTransmite paquetes periódicos")
+    System(active_ap, "active_ap", "Firmware receptor WiFi\nModo AP\nCaptura CSI de estaciones conectadas")
+    System(passive, "passive", "Firmware monitor pasivo\nModo promiscuo\nCaptura CSI sin asociarse a red")
+}
+
+System(router, "WiFi Access Point", "Punto de acceso WiFi\n(red existente o active_ap)")
+System(pc_server, "Servidor de Borde", "PC que recibe datos CSI\npor serial a 921600 baudios")
+System(serial_tools, "Utilidades Python", "serial_append_time.py\nserial_plot_csi_live.py")
+
+Rel(investigador, active_sta, "Configura y flashea firmware")
+Rel(investigador, active_ap, "Configura y flashea firmware")
+Rel(investigador, passive, "Configura y flashea firmware")
+
+Rel(active_sta, router, "Se conecta y transmite", "WiFi")
+Rel(router, active_ap, "Estación conectada envía paquetes", "WiFi")
+Rel(passive, router, "Escucha tráfico del canal", "WiFi promiscuo")
+
+Rel(active_ap, pc_server, "Envía datos CSI por serial", "UART 921600 baud")
+Rel(passive, pc_server, "Envía datos CSI por serial", "UART 921600 baud")
+Rel(pc_server, serial_tools, "Procesa flujo serial", "CSV pipeline")
+
+Rel(investigador, pc_server, "Captura salida serial a archivo .csv")
+
+SHOW_LEGEND()
+@enduml

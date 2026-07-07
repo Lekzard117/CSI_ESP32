@@ -1,0 +1,68 @@
+@startuml ESP32-CSI-Tool - Use Case Diagram
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Investigador\nAcadémico" as investigador
+actor "WiFi AP\nExistente" as ap_externo
+actor "Servidor de\nBorde (PC)" as servidor
+
+rectangle "active_sta" {
+  usecase "Transmitir paquetes\nWiFi periódicamente" as UC_STA_TX
+  note right of UC_STA_TX
+    Se conecta a un AP
+    configurado y envía
+    paquetes a intervalo fijo
+    (FR-001)
+  end note
+}
+
+rectangle "active_ap" {
+  usecase "Capturar CSI como\npunto de acceso" as UC_AP_RX
+  usecase "Sincronizar tiempo\nde estaciones" as UC_AP_SYNC
+  usecase "Transmitir CSI\npor serial UART" as UC_AP_SERIAL
+  note right of UC_AP_RX
+    Acepta conexiones de
+    estaciones y captura CSI
+    de cada paquete entrante
+    (FR-002)
+  end note
+}
+
+rectangle "passive" {
+  usecase "Monitorear canal\nen modo promiscuo" as UC_PASSIVE_MON
+  note right of UC_PASSIVE_MON
+    Captura CSI de todos
+    los paquetes en el canal
+    sin asociarse a red
+    (FR-003)
+  end note
+}
+
+rectangle "Utilidades Python" {
+  usecase "Añadir timestamp\nde PC a cada línea" as UC_PY_TIME
+  usecase "Graficar amplitud\nCSI en tiempo real" as UC_PY_PLOT
+}
+
+rectangle "Configuración\ncompartida" {
+  usecase "Configurar firmware\ncon menuconfig" as UC_CONFIG
+  usecase "Flashear dispositivo\ncon idf.py flash" as UC_FLASH
+}
+
+investigador --> UC_CONFIG : <<extend>>
+investigador --> UC_FLASH : <<extend>>
+investigador --> UC_STA_TX
+investigador --> UC_AP_RX
+investigador --> UC_AP_SYNC
+investigador --> UC_AP_SERIAL
+investigador --> UC_PASSIVE_MON
+investigador --> UC_PY_TIME
+investigador --> UC_PY_PLOT
+
+UC_STA_TX --> ap_externo : "se conecta a"
+ap_externo --> UC_AP_RX : "envía paquetes"
+UC_AP_RX --> UC_AP_SERIAL : "incluye"
+UC_PASSIVE_MON --> UC_AP_SERIAL : "hereda formato"
+UC_AP_SERIAL --> servidor : "envía datos"
+
+@enduml

@@ -1,0 +1,97 @@
+@startuml ESP32-CSI-Tool - CIM Requirements Model
+
+title CIM - Computation Independent Model
+caption ESP32-CSI-Tool: Relación entre actores, requisitos y componentes del sistema
+
+package "Actores" {
+  actor "Investigador\nAcadémico" as actor_inv
+  actor "WiFi AP\nExistente" as actor_ap
+}
+
+package "Requisitos Funcionales" {
+  rectangle "FR-001\nTransmisión periódica\nactive_sta" as fr001
+  rectangle "FR-002\nCaptura CSI\ncomo AP" as fr002
+  rectangle "FR-003\nCaptura pasiva\nmodo promiscuo" as fr003
+  rectangle "FR-004\nFormato CSV\ncompleto (26 campos)" as fr004
+  rectangle "FR-005\nTransmisión serial\n921600 baud" as fr005
+  rectangle "FR-006\nIdentificación\npor MAC" as fr006
+  rectangle "FR-007\nSincronización\ntemporal automática" as fr007
+  rectangle "FR-008\nTimestamp manual\nvia SETTIME" as fr008
+  rectangle "FR-009\nAppend timestamp\nPC (serial_append_time)" as fr009
+  rectangle "FR-010\nVisualización en\nvivo (serial_plot)" as fr010
+}
+
+package "Componentes del Sistema" {
+  component "active_sta" as comp_sta
+  component "active_ap" as comp_ap
+  component "passive" as comp_passive
+  component "serial_append_time.py" as comp_pytime
+  component "serial_plot_csi_live.py" as comp_pyplot
+  component "Serial UART\n921600 baud" as comp_serial
+}
+
+package "Requisitos No Funcionales" {
+  rectangle "NFR-001\n921600 baud\nsin bloqueo" as nfr001
+  rectangle "NFR-002\nFormato CSV\nconsistente" as nfr002
+  rectangle "NFR-003\nCompilación\nIDF v6.0.1" as nfr003
+  rectangle "NFR-004\nReproducibilidad\nde experimentos" as nfr004
+}
+
+''''''''''''''''''''''''''''''
+' Relaciones actor → requisito
+''''''''''''''''''''''''''''''
+actor_inv --> fr001
+actor_inv --> fr002
+actor_inv --> fr003
+actor_inv --> fr004
+actor_inv --> fr005
+actor_inv --> fr006
+actor_inv --> fr007
+actor_inv --> fr008
+actor_inv --> fr009
+actor_inv --> fr010
+
+actor_ap --> fr002
+
+''''''''''''''''''''''''''''''
+' Relaciones requisito → componente
+''''''''''''''''''''''''''''''
+fr001 --> comp_sta
+fr002 --> comp_ap
+fr003 --> comp_passive
+fr004 --> comp_ap
+fr004 --> comp_passive
+fr005 --> comp_ap
+fr005 --> comp_passive
+fr005 --> comp_serial
+fr006 --> comp_ap
+fr006 --> comp_passive
+fr007 --> comp_ap
+fr008 --> comp_ap
+fr009 --> comp_pytime
+fr010 --> comp_pyplot
+
+''''''''''''''''''''''''''''''
+' NFRs vinculados a componentes
+''''''''''''''''''''''''''''''
+nfr001 --> comp_serial
+nfr002 --> comp_ap
+nfr002 --> comp_passive
+nfr003 --> comp_sta
+nfr003 --> comp_ap
+nfr003 --> comp_passive
+nfr004 --> comp_sta
+nfr004 --> comp_ap
+nfr004 --> comp_passive
+
+''''''''''''''''''''''''''''''
+' Relaciones entre componentes
+''''''''''''''''''''''''''''''
+comp_sta --> comp_ap : "conecta y transmite"
+comp_sta --> comp_passive : "(visible como tráfico)"
+comp_ap --> comp_serial : "envía CSI_DATA"
+comp_passive --> comp_serial : "envía CSI_DATA"
+comp_serial --> comp_pytime : "tubería de datos"
+comp_serial --> comp_pyplot : "tubería de datos"
+
+@enduml

@@ -1,3 +1,34 @@
+---
+schema_version: 1
+artifact_type: spec-kitty.analysis-report
+command: /spec-kitty.analyze
+mission_slug: csi-tool-spec-modeling-01KWX9DF
+mission_id: 01KWX9DFNGHEXCE4GJD098KP31
+generated_at: '2026-07-07T21:35:37.556458+00:00'
+analyzer_agent: unknown
+input_artifacts:
+  spec.md:
+    path: /home/lekzard117/Documentos/CSI-ESP/kitty-specs/csi-tool-spec-modeling-01KWX9DF/spec.md
+    sha256: 3a18df0664ae638d82664cb305837d94204f17c4c5543dd14838547a1d5734bd
+  plan.md:
+    path: /home/lekzard117/Documentos/CSI-ESP/kitty-specs/csi-tool-spec-modeling-01KWX9DF/plan.md
+    sha256: 790648190f15002abceb4ca7ee2187d80e7449e186e3dc0b5f66baa97bf37cb8
+  tasks.md:
+    path: /home/lekzard117/Documentos/CSI-ESP/kitty-specs/csi-tool-spec-modeling-01KWX9DF/tasks.md
+    sha256: 213cf9bbb60eaa80a60561fa596ea2f173938c8babc8c441431228db368ba4f5
+  charter:
+    path: /home/lekzard117/Documentos/CSI-ESP/.kittify/charter/charter.md
+    sha256: 87fdf612bf95a4782a5ba786713205a51039936b6f61ceb4fb4495c6c238bb8b
+verdict: unknown
+issue_counts:
+  info:
+  critical:
+  low:
+  high:
+  medium:
+findings: []
+---
+
 # Analysis Report: ESP32-CSI-Tool: specification and modeling
 
 **Mission**: `csi-tool-spec-modeling-01KWX9DF`
