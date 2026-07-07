@@ -28,7 +28,7 @@
 **Included subtasks**:
 - [x] T001 Create `models-v1/` directory and scaffold structure
 - [x] T002 Create C4 context diagram (`c4-context-diagram.puml`) for DD-001
-- [ ] T004 Write user stories (`user-stories.md`) for DD-003
+- [x] T004 Write user stories (`user-stories.md`) for DD-003
 
 **Implementation notes**:
 1. T001: Crear `models-v1/` en raíz del repo con estructura plana; los archivos futuros se agregan sin subdirectorios
