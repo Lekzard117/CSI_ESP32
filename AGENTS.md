@@ -101,7 +101,7 @@ idf.py monitor | python ../python_utils/serial_plot_csi_live.py
 Estado actual (reportado 2026-07-07):
 - **ESP32 #1**: Operativo — puede flashearse sin problemas
 - **ESP32 #2**: Operativo — puede flashearse sin problemas
-- **ESP32 #3**: **DADO DE BAJA** — pin TX (GPIO1) dañado o bridge USB-UART defectuoso. Sin respuesta del bootloader vía UART. No recuperable sin adaptador USB-serial externo.
+- **ESP32 #3**: **DADO DE BAJA** — pin TX (GPIO1) dañado o bridge USB-UART defectuoso. Sin respuesta del bootloader vía UART. No recuperable sin adaptador USB-serial externo. (Recovery intentado 2026-07-07, veredicto: no recuperable con herramientas actuales)
 
 ### Implicaciones en la arquitectura
 
