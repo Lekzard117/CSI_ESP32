@@ -72,6 +72,26 @@ tests/
 unitarios. Sin estructura de backend completa porque esta capa es un middleware de
 comunicación, no una aplicación web.
 
+## Architecture Decisions
+
+Ver documento completo: `architecture.md`
+
+| Estilo/Patrón | Decisión |
+|---------------|----------|
+| **Layered + Component-Based** | Capas: Serial → Parseo → Procesamiento → API. Cada etapa como módulo independiente |
+| **Client/Server** | ESP32 como cliente de datos, Flask como servidor de procesamiento |
+| **RESTful** | API HTTP para consultar datos procesados y controlar experimentos |
+| **Pipeline** | Cadena de procesamiento: AGC → Hampel → Butterworth → SG → Fondo → Detección |
+| **DTO** | `CsiLine` transporta datos entre capas sin acoplamiento |
+| **Repository** | Abstracción del origen: serial, archivo o mock |
+| **Polling** | Lector serial consulta el puerto en bucle |
+| **Store and Forward** | Buffer de líneas CSI antes de procesar |
+| **Strategy** | Algoritmo de detección intercambiable |
+| **MVC** | Flask routes (C), modelos (M), templates o API JSON (V) |
+
+**No aplican**: SOA, Microservices, Message Bus, Service Registry/Discovery, API Gateway,
+Circuit Breaker, Load Balance, SSO — sistema académico local de 1 servidor.
+
 ## Implementation Concern Map
 
 ### IC-01 — Protocolo de línea y parser CSV
