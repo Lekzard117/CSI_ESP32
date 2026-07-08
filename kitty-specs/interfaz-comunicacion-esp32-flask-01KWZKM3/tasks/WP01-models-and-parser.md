@@ -6,6 +6,7 @@ requirement_refs:
 - FR-002
 - FR-003
 - FR-005
+- FR-009
 tracker_refs: []
 subtasks:
 - T001
