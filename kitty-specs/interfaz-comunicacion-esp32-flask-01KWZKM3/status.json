@@ -1,7 +1,7 @@
 {
-  "event_count": 1,
-  "last_event_id": "01KX02ACT8SBWE0HN4YSNDVAQ5",
-  "materialized_at": "2026-07-08T05:13:27.624781+00:00",
+  "event_count": 2,
+  "last_event_id": "01KX02AD495M5M2GXWTP49R08K",
+  "materialized_at": "2026-07-08T05:13:27.945284+00:00",
   "mission_number": "",
   "mission_slug": "interfaz-comunicacion-esp32-flask-01KWZKM3",
   "mission_type": "software-dev",
@@ -14,7 +14,7 @@
     "for_review": 0,
     "in_progress": 0,
     "in_review": 0,
-    "planned": 1
+    "planned": 2
   },
   "work_packages": {
     "WP01": {
@@ -23,6 +23,13 @@
       "lane": "planned",
       "last_event_id": "01KX02ACT8SBWE0HN4YSNDVAQ5",
       "last_transition_at": "2026-07-08T05:13:27.624781+00:00"
+    },
+    "WP02": {
+      "actor": "finalize-tasks",
+      "force_count": 0,
+      "lane": "planned",
+      "last_event_id": "01KX02AD495M5M2GXWTP49R08K",
+      "last_transition_at": "2026-07-08T05:13:27.945284+00:00"
     }
   }
 }
