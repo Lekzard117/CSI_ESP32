@@ -51,11 +51,17 @@ de roles según el tipo de flasheo, y manejo de errores.
 Cada línea CSI sigue el formato:
 
 ```
-CSI_DATA,<role>,<mac>,<rssi>,<rate>,<sig_mode>,<mcs>,<bandwidth>,<smoothing>,<not_sounding>,<aggregation>,<stbc>,<fec_coding>,<sgi>,<noise_floor>,<ampdu_cnt>,<channel>,<secondary_channel>,<local_timestamp>,<ant>,<sig_len>,<rx_state>,<real_time_set>,<real_timestamp>,<len>,<I0>,<Q0>,<I1>,<Q1>,...
+CSI_DATA,<role>,<mac>,<rssi>,<rate>,<sig_mode>,<mcs>,<bandwidth>,<smoothing>,<not_sounding>,<aggregation>,<stbc>,<fec_coding>,<sgi>,<noise_floor>,<ampdu_cnt>,<channel>,<secondary_channel>,<local_timestamp>,<ant>,<sig_len>,<rx_state>,<real_time_set>,<real_timestamp>,<len>,[<I0> <Q0> <I1> <Q1> ...]
 ```
 
 Los 25 primeros campos son metadatos separados por coma. El campo 26 contiene los
-valores I/Q interleaved separados por coma.
+valores I/Q interleaved **entre corchetes `[...]` y separados por espacio**, NO por coma.
+El formato exacto está definido en `_components/csi_component.h:27-79` del firmware.
+
+Ejemplo real de línea:
+```
+CSI_DATA,AP,AA:BB:CC:DD:EE:FF,-65,1,0,1,1,0,0,0,0,-90,0,6,0,12345678,0,100,0,1,1712345678.500,128,[12 -5 34 -8 ...]
+```
 
 ### Comportamiento por tipo de flasheo
 

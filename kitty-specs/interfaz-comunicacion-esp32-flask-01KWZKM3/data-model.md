@@ -31,7 +31,7 @@ Entidad que representa una línea CSI parseada.
 | real_time_set | bool | 23 | Reloj sincronizado |
 | real_timestamp | float | 24 | Segundos steady_clock |
 | len | int | 25 | Longitud buffer CSI_DATA |
-| csi_data | list[int] | 26+ | Valores I/Q interleaved int8 |
+| csi_data | list[int] | 26+ | Valores I/Q interleaved int8 entre `[...]`, separados por espacio |
 
 ## CsiBuffer
 

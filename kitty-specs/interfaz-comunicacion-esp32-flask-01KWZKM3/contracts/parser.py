@@ -5,10 +5,13 @@ def parse_line(raw: str) -> CsiLine:
     parts = raw.strip().split(",")
 
     if len(parts) < 26:
-        raise ValueError(f"Expected >=26 fields, got {len(parts)}")
+        raise ValueError(f"Expected >=26 fields (25 metadata + CSI_DATA), got {len(parts)}")
 
     if parts[0] != "CSI_DATA":
         raise ValueError(f"Invalid prefix: {parts[0]}")
+
+    csi_raw = parts[25]
+    csi_values = _parse_csi_bracket(csi_raw)
 
     line = CsiLine(
         type=parts[0],
@@ -36,10 +39,20 @@ def parse_line(raw: str) -> CsiLine:
         real_time_set=_bool(parts[22]),
         real_timestamp=_float(parts[23]),
         len=_int(parts[24]),
-        csi_data=[int(v) for v in parts[25:] if v],
+        csi_data=csi_values,
     )
 
     return line
+
+
+def _parse_csi_bracket(raw: str) -> list[int]:
+    raw = raw.strip()
+    if not raw.startswith("[") or not raw.endswith("]"):
+        raise ValueError(f"CSI_DATA must be bracket-delimited [...], got: {raw[:20]}")
+    inner = raw[1:-1].strip()
+    if not inner:
+        return []
+    return [int(v) for v in inner.split()]
 
 
 def _int(v: str) -> Optional[int]:
