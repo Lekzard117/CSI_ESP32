@@ -7,6 +7,10 @@ reviewed_at: '2026-07-07T22:00:52Z'
 reviewer_agent: unknown
 verdict: rejected
 wp_id: WP01
+review_artifact_override_at: "2026-07-07T22:02:21Z"
+review_artifact_override_actor: "operator"
+review_artifact_override_wp_id: "WP01"
+review_artifact_override_reason: "Review passed cycle 2: all 3 issues fixed. --skip-review-artifact-check: review-cycle-2.md is a fix-mode prompt artifact, not a rejection."
 ---
 
 # Review Feedback — WP01 (Cycle 1)
