@@ -8,6 +8,9 @@ requirement_refs:
 - FR-005
 - FR-009
 tracker_refs: []
+planning_base_branch: model-kitty-v1
+merge_target_branch: model-kitty-v1
+branch_strategy: Planning artifacts for this mission were generated on model-kitty-v1. During /spec-kitty.implement this WP may branch from a dependency-specific base, but completed changes must merge back into model-kitty-v1 unless the human explicitly redirects the landing branch.
 subtasks:
 - T001
 - T002
@@ -17,12 +20,16 @@ subtasks:
 - T013
 history: []
 authoritative_surface: src/flask_serial/
-create_intent: []
+create_intent:
+- src/flask_serial/__init__.py
+- src/flask_serial/models.py
+- src/flask_serial/parser.py
+- tests/__init__.py
+- tests/test_parser.py
 execution_mode: code_change
 owned_files:
 - src/flask_serial/**
 - tests/test_parser.py
-- kitty-specs/interfaz-comunicacion-esp32-flask-01KWZKM3/contracts/**
 tags: []
 ---
 

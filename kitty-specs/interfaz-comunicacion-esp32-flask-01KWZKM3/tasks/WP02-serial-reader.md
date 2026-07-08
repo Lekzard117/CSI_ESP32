@@ -9,6 +9,9 @@ requirement_refs:
 - FR-006
 - FR-008
 tracker_refs: []
+planning_base_branch: model-kitty-v1
+merge_target_branch: model-kitty-v1
+branch_strategy: Planning artifacts for this mission were generated on model-kitty-v1. During /spec-kitty.implement this WP may branch from a dependency-specific base, but completed changes must merge back into model-kitty-v1 unless the human explicitly redirects the landing branch.
 subtasks:
 - T006
 - T007
@@ -17,7 +20,9 @@ subtasks:
 - T010
 history: []
 authoritative_surface: src/flask_serial/
-create_intent: []
+create_intent:
+- src/flask_serial/reader.py
+- tests/test_reader.py
 execution_mode: code_change
 owned_files:
 - src/flask_serial/reader.py
