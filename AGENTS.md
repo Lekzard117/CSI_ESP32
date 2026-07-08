@@ -101,20 +101,19 @@ idf.py monitor | python ../python_utils/serial_plot_csi_live.py
 Estado actual (reportado 2026-07-07):
 - **ESP32 #1**: Operativo — puede flashearse sin problemas
 - **ESP32 #2**: Operativo — puede flashearse sin problemas
-- **ESP32 #3**: Defectuoso — problemas de respuesta, por determinar si es recuperable
+- **ESP32 #3**: **DADO DE BAJA** — pin TX (GPIO1) dañado o bridge USB-UART defectuoso. Sin respuesta del bootloader vía UART. No recuperable sin adaptador USB-serial externo.
 
 ### Implicaciones en la arquitectura
 
-Con solo 2 dispositivos ESP32 funcionales no se pueden ocupar los 3 roles (active_sta, active_ap, passive) simultáneamente en hardware dedicado. Las configuraciones viables son:
+Con solo 2 dispositivos ESP32 funcionales no se pueden ocupar los 3 roles (active_sta, active_ap, passive) simultáneamente en hardware dedicado. La configuración seleccionada es:
 
 | Configuración | Dispositivo A | Dispositivo B | Generador de tráfico |
 |---|---|---|---|
-| TX/RX clásico | active_sta | active_ap | El propio active_sta |
-| AP + externo | active_ap | — | Smartphone u otro dispositivo WiFi |
-| Promiscuo | passive | — | Smartphone u otro dispositivo WiFi |
-| TX + monitor | active_sta | passive | El propio active_sta |
+| **AP + smartphone** | active_ap | — | Smartphone u otro dispositivo WiFi |
 
-Un smartphone puede generar tráfico WiFi que el modo `passive` capture en modo promiscuo, lo cual es un setup válido y común en investigación CSI. Esto no requiere un emisor ESP32 dedicado.
+Un smartphone genera tráfico WiFi que el ESP32 en modo `active_ap` captura al recibir los paquetes de la estación conectada. Esto no requiere un emisor ESP32 dedicado.
+
+**Nota**: El modo `passive` (promiscuo) no se usará en esta configuración — el smartphone se conecta activamente al `active_ap` y genera tráfico que el AP captura con CSI. Esto es un setup válido y común en investigación CSI.
 
 ## Notas
 
