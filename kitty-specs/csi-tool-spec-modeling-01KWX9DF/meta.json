@@ -1,4 +1,16 @@
 {
+  "acceptance_history": [
+    {
+      "acceptance_mode": "local",
+      "accepted_at": "2026-07-08T00:53:20.097717+00:00",
+      "accepted_by": "lekzard117",
+      "accepted_from_commit": "ddb67d477b9e1cfbf046fd9007f2dfdd2d90670b"
+    }
+  ],
+  "acceptance_mode": "local",
+  "accepted_at": "2026-07-08T00:53:20.097717+00:00",
+  "accepted_by": "lekzard117",
+  "accepted_from_commit": "ddb67d477b9e1cfbf046fd9007f2dfdd2d90670b",
   "created_at": "2026-07-07T03:19:45.584758+00:00",
   "friendly_name": "ESP32-CSI-Tool: specification and modeling",
   "mission_id": "01KWX9DFNGHEXCE4GJD098KP31",
