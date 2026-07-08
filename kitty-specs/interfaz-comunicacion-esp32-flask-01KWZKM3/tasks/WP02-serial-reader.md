@@ -28,6 +28,9 @@ owned_files:
 - src/flask_serial/reader.py
 - tests/test_reader.py
 tags: []
+agent_profile: python-pedro
+role: implementer
+agent: general
 ---
 
 ## ⚡ Do This First: Load Agent Profile

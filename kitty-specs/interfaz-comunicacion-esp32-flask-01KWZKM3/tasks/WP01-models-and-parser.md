@@ -31,6 +31,9 @@ owned_files:
 - src/flask_serial/**
 - tests/test_parser.py
 tags: []
+agent_profile: python-pedro
+role: implementer
+agent: general
 ---
 
 ## ⚡ Do This First: Load Agent Profile

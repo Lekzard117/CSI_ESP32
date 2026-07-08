@@ -21,6 +21,9 @@ execution_mode: code_change
 owned_files:
 - src/flask_serial/commands.py
 tags: []
+agent_profile: python-pedro
+role: implementer
+agent: general
 ---
 
 ## ⚡ Do This First: Load Agent Profile
