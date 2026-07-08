@@ -105,15 +105,33 @@ Estado actual (reportado 2026-07-07):
 
 ### Implicaciones en la arquitectura
 
-Con solo 2 dispositivos ESP32 funcionales no se pueden ocupar los 3 roles (active_sta, active_ap, passive) simultáneamente en hardware dedicado. La configuración seleccionada es:
+Con solo 2 dispositivos ESP32 funcionales no se pueden ocupar los 3 roles (active_sta, active_ap, passive) simultáneamente en hardware dedicado. Las configuraciones disponibles son:
 
-| Configuración | Dispositivo A | Dispositivo B | Generador de tráfico |
-|---|---|---|---|
-| **AP + smartphone** | active_ap | — | Smartphone u otro dispositivo WiFi |
+#### Configuración A: AP + smartphone (seleccionada)
 
-Un smartphone genera tráfico WiFi que el ESP32 en modo `active_ap` captura al recibir los paquetes de la estación conectada. Esto no requiere un emisor ESP32 dedicado.
+| Dispositivo A | Generador de tráfico |
+|---|---|
+| active_ap (RX) | Smartphone u otro dispositivo WiFi |
 
-**Nota**: El modo `passive` (promiscuo) no se usará en esta configuración — el smartphone se conecta activamente al `active_ap` y genera tráfico que el AP captura con CSI. Esto es un setup válido y común en investigación CSI.
+El smartphone se conecta al AP del ESP32 y genera tráfico que el firmware captura con CSI. Setup simple, no requiere emisor ESP32 dedicado.
+
+**Ventaja**: No necesita un ESP32 para transmitir — un dispositivo móvil es suficiente.
+**Desventaja**: Menos control sobre los parámetros de transmisión (potencia, tasa, MCS).
+
+#### Configuración B: active_sta + active_ap (alternativa)
+
+| Dispositivo A | Dispositivo B | Generador de tráfico |
+|---|---|---|
+| active_ap (RX) | active_sta (TX) | El propio active_sta |
+
+Ambos ESP32 se utilizan: uno como punto de acceso (active_ap) y otro como estación conectada (active_sta) que genera tráfico. Setup clásico TX/RX con control completo.
+
+**Ventaja**: Control total sobre tráfico (tasa, MCS, intervalo, payload).
+**Desventaja**: Consume ambos ESP32; no queda repuesto para passive.
+
+**Nota**: El modo `passive` (promiscuo) no se usará en la configuración inicial — el smartphone se conecta activamente al `active_ap` y genera tráfico que el AP captura con CSI. Esto es un setup válido y común en investigación CSI.
+
+Ambas configuraciones pueden intercambiarse flasheando el firmware correspondiente en cada dispositivo, sin necesidad de hardware adicional.
 
 ## Notas
 
