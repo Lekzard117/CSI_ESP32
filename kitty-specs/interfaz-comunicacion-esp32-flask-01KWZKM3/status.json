@@ -1,7 +1,7 @@
 {
-  "event_count": 5,
-  "last_event_id": "01KX2946KHXQX9YQJP16AHHJCY",
-  "materialized_at": "2026-07-09T01:50:53.551820+00:00",
+  "event_count": 6,
+  "last_event_id": "01KX29GJ4XKEJS26P478YMZ79S",
+  "materialized_at": "2026-07-09T01:57:38.589919+00:00",
   "mission_number": "",
   "mission_slug": "interfaz-comunicacion-esp32-flask-01KWZKM3",
   "mission_type": "software-dev",
@@ -11,8 +11,8 @@
     "canceled": 0,
     "claimed": 0,
     "done": 0,
-    "for_review": 0,
-    "in_progress": 1,
+    "for_review": 1,
+    "in_progress": 0,
     "in_review": 0,
     "planned": 2
   },
@@ -20,9 +20,9 @@
     "WP01": {
       "actor": "opencode:deepseek-v4-flash-free:python-pedro:implementer",
       "force_count": 0,
-      "lane": "in_progress",
-      "last_event_id": "01KX2946KHXQX9YQJP16AHHJCY",
-      "last_transition_at": "2026-07-09T01:50:53.551820+00:00"
+      "lane": "for_review",
+      "last_event_id": "01KX29GJ4XKEJS26P478YMZ79S",
+      "last_transition_at": "2026-07-09T01:57:38.589919+00:00"
     },
     "WP02": {
       "actor": "finalize-tasks",
