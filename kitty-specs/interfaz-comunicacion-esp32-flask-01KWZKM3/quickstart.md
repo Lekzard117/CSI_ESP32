@@ -1,6 +1,6 @@
 # Quickstart — Interfaz de Comunicación ESP32 → Flask
 
-## Dependencias
+## Dependencies
 
 ```bash
 pip install pyserial
@@ -10,29 +10,37 @@ pip install pyserial
 
 ```python
 from flask_serial.reader import SerialReader
+from flask_serial.commands import send_settime
 
-# Conectar a un puerto
+# Configurar el puerto
 reader = SerialReader('/dev/ttyUSB0', baud=921600)
 reader.connect()
+print(f"Conectado: {reader.is_connected}")  # → True
+
+# Enviar comando de sincronización
+import time
+send_settime(reader, int(time.time()))
 
 # Leer líneas CSI
 for line in reader.lines():
     print(f"Rol: {line.role}, MAC: {line.mac}, RSSI: {line.rssi}")
     print(f"  Subportadoras: {len(line.csi_data)} valores I/Q")
+    if line.csi_data:
+        amplitudes = [abs(v) for v in line.csi_data]
+        print(f"  Amplitud media: {sum(amplitudes) / len(amplitudes):.1f}")
 ```
 
 ## Múltiples puertos
 
 ```python
-# Configurar desde variable de entorno
-# SERIAL_PORTS=/dev/ttyUSB0,/dev/ttyUSB1
+from flask_serial.reader import create_readers
 
-import os
-ports = os.getenv('SERIAL_PORTS', '/dev/ttyUSB0').split(',')
-
-readers = [SerialReader(p) for p in ports]
-for reader in readers:
-    reader.connect()
+# export SERIAL_PORTS=/dev/ttyUSB0,/dev/ttyUSB1
+for reader in create_readers():
+    if reader.connect():
+        print(f"OK: {reader.port}")
+    else:
+        print(f"FAIL: {reader.port}")
 ```
 
 ## Comandos de control

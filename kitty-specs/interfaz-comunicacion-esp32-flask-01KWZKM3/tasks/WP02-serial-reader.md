@@ -18,7 +18,13 @@ subtasks:
 - T008
 - T009
 - T010
-history: []
+history:
+- state: implemented
+  timestamp: "2026-07-09T02:15:00Z"
+  agent: opencode:deepseek-v4-flash-free:python-pedro:implementer
+- state: done
+  timestamp: "2026-07-09T02:30:00Z"
+  agent: opencode:deepseek-v4-flash-free:python-pedro:implementer
 authoritative_surface: src/flask_serial/
 create_intent:
 - src/flask_serial/reader.py
@@ -349,3 +355,8 @@ Verify:
 3. Reconnection loop doesn't spin (has sleep delay)
 4. Buffer doesn't grow unbounded (split removes processed bytes)
 5. All mock tests are deterministic (no real hardware needed)
+
+## Activity Log
+
+- 2026-07-09T02:10:00Z – opencode:deepseek-v4-flash-free:python-pedro:implementer – Implemented: reader.py (111 lines), test_reader.py (16 tests)
+- 2026-07-09T02:15:00Z – opencode:deepseek-v4-flash-free:python-pedro:implementer – Committed and marked done

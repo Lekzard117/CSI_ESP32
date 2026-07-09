@@ -1,0 +1,15 @@
+[project]
+name = "flask-serial"
+version = "0.1.0"
+description = "ESP32-Flask serial communication interface for CSI data"
+dependencies = ["pyserial>=3.5"]
+
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
