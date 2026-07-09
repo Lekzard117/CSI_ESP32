@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "mission_slug": "interfaz-comunicacion-esp32-flask-01KWZKM3",
+  "mission_id": "01KWZKM3TKXH54DBH7MGDKTA61",
+  "mission_branch": "kitty/mission-interfaz-comunicacion-esp32-flask-01KWZKM3",
+  "target_branch": "model-kitty-v1",
+  "lanes": [
+    {
+      "lane_id": "lane-a",
+      "wp_ids": [
+        "WP01",
+        "WP02",
+        "WP03"
+      ],
+      "write_scope": [
+        "src/flask_serial/**",
+        "src/flask_serial/commands.py",
+        "src/flask_serial/reader.py",
+        "tests/test_parser.py",
+        "tests/test_reader.py"
+      ],
+      "predicted_surfaces": [
+        "api",
+        "legacy-cleanup",
+        "tests",
+        "tracker-integration"
+      ],
+      "depends_on_lanes": [],
+      "parallel_group": 0
+    }
+  ],
+  "computed_at": "2026-07-08T05:13:28.265024+00:00",
+  "computed_from": "dependency_graph+ownership",
+  "planning_artifact_wps": [],
+  "collapse_report": {
+    "events": [
+      {
+        "wp_a": "WP01",
+        "wp_b": "WP02",
+        "rule": "write_scope_overlap",
+        "evidence": "overlapping globs: 'src/flask_serial/**' vs 'src/flask_serial/reader.py'; WP02 depends on WP01"
+      },
+      {
+        "wp_a": "WP01",
+        "wp_b": "WP03",
+        "rule": "write_scope_overlap",
+        "evidence": "overlapping globs: 'src/flask_serial/**' vs 'src/flask_serial/commands.py'"
+      }
+    ],
+    "total_merges": 2,
+    "independent_wps_collapsed": 0,
+    "by_rule": {
+      "write_scope_overlap": 2
+    }
+  }
+}

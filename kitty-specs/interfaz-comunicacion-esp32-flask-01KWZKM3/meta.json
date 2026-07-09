@@ -1,0 +1,13 @@
+{
+  "coordination_branch": "kitty/mission-interfaz-comunicacion-esp32-flask-01KWZKM3",
+  "created_at": "2026-07-08T00:56:37.460091+00:00",
+  "friendly_name": "interfaz comunicacion esp32 flask",
+  "mission_id": "01KWZKM3TKXH54DBH7MGDKTA61",
+  "mission_number": null,
+  "mission_slug": "interfaz-comunicacion-esp32-flask-01KWZKM3",
+  "mission_type": "software-dev",
+  "purpose_context": "This mission advances interfaz comunicacion esp32 flask on model-kitty-v1 so stakeholders can track the work from mission creation onward.",
+  "purpose_tldr": "interfaz comunicacion esp32 flask",
+  "slug": "interfaz-comunicacion-esp32-flask-01KWZKM3",
+  "target_branch": "model-kitty-v1"
+}
