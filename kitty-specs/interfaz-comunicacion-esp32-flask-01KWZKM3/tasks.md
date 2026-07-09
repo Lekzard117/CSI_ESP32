@@ -43,12 +43,12 @@
 
 #### Included Subtasks
 
-- [ ] T001 — Create `src/flask_serial/` package structure
-- [ ] T002 — Implement `models.py` — CsiLine dataclass + Role enum
-- [ ] T003 — Implement `parser.py` — parse_line() con validación bracket+space
-- [ ] T004 — Write `test_parser.py` — unit tests
-- [ ] T005 — Write DD-002 — protocol specification document
-- [ ] T013 — Write DD-001 — sequence diagram (Mermaid)
+- [x] T001 — Create `src/flask_serial/` package structure
+- [x] T002 — Implement `models.py` — CsiLine dataclass + Role enum
+- [x] T003 — Implement `parser.py` — parse_line() con validación bracket+space
+- [x] T004 — Write `test_parser.py` — unit tests
+- [x] T005 — Write DD-002 — protocol specification document
+- [x] T013 — Write DD-001 — sequence diagram (Mermaid)
 
 #### Implementation Sketch
 
