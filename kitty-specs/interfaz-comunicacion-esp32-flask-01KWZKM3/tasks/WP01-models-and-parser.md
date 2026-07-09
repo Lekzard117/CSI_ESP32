@@ -11,6 +11,9 @@ tracker_refs: []
 planning_base_branch: model-kitty-v1
 merge_target_branch: model-kitty-v1
 branch_strategy: Planning artifacts for this mission were generated on model-kitty-v1. During /spec-kitty.implement this WP may branch from a dependency-specific base, but completed changes must merge back into model-kitty-v1 unless the human explicitly redirects the landing branch.
+base_branch: kitty/mission-interfaz-comunicacion-esp32-flask-01KWZKM3
+base_commit: 22d7c1c67805ba7dc70fa3016f8e715fe7a93a9b
+created_at: '2026-07-09T01:50:53.466780+00:00'
 subtasks:
 - T001
 - T002
@@ -18,7 +21,10 @@ subtasks:
 - T004
 - T005
 - T013
+agent: general
+shell_pid: '22728'
 history: []
+agent_profile: python-pedro
 authoritative_surface: src/flask_serial/
 create_intent:
 - src/flask_serial/__init__.py
@@ -30,10 +36,8 @@ execution_mode: code_change
 owned_files:
 - src/flask_serial/**
 - tests/test_parser.py
-tags: []
-agent_profile: python-pedro
 role: implementer
-agent: general
+tags: []
 ---
 
 ## ⚡ Do This First: Load Agent Profile

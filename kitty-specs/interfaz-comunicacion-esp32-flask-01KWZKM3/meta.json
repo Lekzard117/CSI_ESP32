@@ -9,5 +9,7 @@
   "purpose_context": "This mission advances interfaz comunicacion esp32 flask on model-kitty-v1 so stakeholders can track the work from mission creation onward.",
   "purpose_tldr": "interfaz comunicacion esp32 flask",
   "slug": "interfaz-comunicacion-esp32-flask-01KWZKM3",
-  "target_branch": "model-kitty-v1"
+  "target_branch": "model-kitty-v1",
+  "vcs": "git",
+  "vcs_locked_at": "2026-07-09T01:50:52.312402+00:00"
 }
