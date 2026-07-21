@@ -1,0 +1,15 @@
+{
+  "coordination_branch": "kitty/mission-cambio-requisitos-csi-01KY3E10",
+  "created_at": "2026-07-21T22:51:28.079772+00:00",
+  "flattened": false,
+  "friendly_name": "Cambio de requisitos: campos CSI, roles y tasa de baudios",
+  "mission_id": "01KY3E10EFRKMMDMG7ZMY3S2M7",
+  "mission_number": null,
+  "mission_slug": "cambio-requisitos-csi-01KY3E10",
+  "mission_type": "software-dev",
+  "purpose_context": "This mission advances Cambio de requisitos: campos CSI, roles y tasa de baudios on model-kitty-v1 so stakeholders can track the work from mission creation onward.",
+  "purpose_tldr": "Reducir los 26 campos del formato CSI a un subset esencial, eliminar el campo role (MAC como identificador único) y evaluar la tasa de baudios",
+  "slug": "cambio-requisitos-csi-01KY3E10",
+  "target_branch": "model-kitty-v1",
+  "topology": "coord"
+}
