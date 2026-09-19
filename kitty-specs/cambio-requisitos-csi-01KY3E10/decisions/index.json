@@ -1,0 +1,79 @@
+{
+  "entries": [
+    {
+      "created_at": "2026-07-21T22:52:08.354761Z",
+      "decision_id": "01KY3E27S23Q84T30HKS3EQ45W",
+      "final_answer": "No lo se, sugiereme \u2014 analizar campos indispensables antes de decidir",
+      "input_key": "csi_campos_esenciales",
+      "mission_id": "01KY3E10EFRKMMDMG7ZMY3S2M7",
+      "mission_slug": "cambio-requisitos-csi-01KY3E10",
+      "opened_by": "cli",
+      "options": [
+        "Solo: type, mac, rssi, channel, local_timestamp, ant, len, CSI_DATA",
+        "Solo: mac, rssi, channel, local_timestamp, ant, len, CSI_DATA (sin type)",
+        "Prefiero decidirlo despues",
+        "No lo se, sugiereme"
+      ],
+      "origin_flow": "plan",
+      "other_answer": false,
+      "question": "\u00bfQu\u00e9 campos concretos del formato CSI_DATA de 26 deber\u00edan conservarse? Ejemplos: type, mac, rssi, channel, local_timestamp, ant, len, CSI_DATA. \u00bfCu\u00e1les eliminar? Por ejemplo: role, sig_mode, mcs, bandwidth, smoothing, aggregation, stbc, fec_coding, ampdu_cnt, secondary_channel, real_time_set, real_timestamp, noise_floor, rate, sig_len, rx_state.",
+      "rationale": null,
+      "resolved_at": "2026-07-21T23:00:45.980221Z",
+      "resolved_by": null,
+      "slot_key": "plan.data-model.campos-esenciales",
+      "status": "resolved",
+      "step_id": null,
+      "summary_json": null
+    },
+    {
+      "created_at": "2026-07-21T23:10:50.073033Z",
+      "decision_id": "01KY3F4F6RXGTS9D7QCDJY7MM0",
+      "final_answer": "Si, eliminar role. MAC es suficiente",
+      "input_key": "eliminar_role",
+      "mission_id": "01KY3E10EFRKMMDMG7ZMY3S2M7",
+      "mission_slug": "cambio-requisitos-csi-01KY3E10",
+      "opened_by": "cli",
+      "options": [
+        "Si, eliminar role. MAC es suficiente",
+        "No, conservar role"
+      ],
+      "origin_flow": "plan",
+      "other_answer": false,
+      "question": "Confirmas que eliminamos el campo role de la linea CSI_DATA y usamos solo la direccion MAC (campo mac) como identificador unico del dispositivo?",
+      "rationale": null,
+      "resolved_at": "2026-07-21T23:11:50.350175Z",
+      "resolved_by": null,
+      "slot_key": "plan.data-model.eliminar-role",
+      "status": "resolved",
+      "step_id": null,
+      "summary_json": null
+    },
+    {
+      "created_at": "2026-07-21T23:11:58.881164Z",
+      "decision_id": "01KY3F6JD1TMR2B80QTEJMRAWG",
+      "final_answer": "Mantener 921600 pero configurable. Evaluar impacto en serial y procesamiento",
+      "input_key": "tasa_baudios",
+      "mission_id": "01KY3E10EFRKMMDMG7ZMY3S2M7",
+      "mission_slug": "cambio-requisitos-csi-01KY3E10",
+      "opened_by": "cli",
+      "options": [
+        "(c) Evaluar las 3 tasas experimentalmente y documentar",
+        "(b) Hacerla configurable, que el usuario elija",
+        "(a) Probar 115200 y ver si funciona",
+        "Aun no lo se"
+      ],
+      "origin_flow": "plan",
+      "other_answer": false,
+      "question": "Sobre la tasa de baudios: actualmente usas 921600. Quieres: (a) probar bajar a 115200 y medir si el throughput alcanza, (b) hacerla configurable via menuconfig/parametro, o (c) evaluar experimentalmente las 3 tasas comunes (115200, 460800, 921600) y documentar resultados?",
+      "rationale": null,
+      "resolved_at": "2026-07-21T23:14:34.556540Z",
+      "resolved_by": null,
+      "slot_key": "plan.performance.tasa-baudios",
+      "status": "resolved",
+      "step_id": null,
+      "summary_json": null
+    }
+  ],
+  "mission_id": "01KY3E10EFRKMMDMG7ZMY3S2M7",
+  "version": 1
+}

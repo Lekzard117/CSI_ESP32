@@ -1,0 +1,8 @@
+{
+  "event": "completed",
+  "invocation_id": "01KZC6HRKTDHBYBAKYCB3PN129",
+  "completed_at": "2026-08-06T18:53:59.988415+00:00",
+  "outcome": "done",
+  "closed_by": "agent",
+  "evidence_ref": "kitty-specs/cambio-requisitos-csi-01KY3E10/decisions/DM-2026-08-06-keep-26-fields.md"
+}

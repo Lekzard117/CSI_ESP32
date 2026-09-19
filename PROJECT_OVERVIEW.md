@@ -7,7 +7,7 @@
 ## Objetivo General:
     Diseñar una arquitectura de tres capas (emisor ESP32, receptor ESP32 y servidor Flask) para la recolección y procesamiento de Channel State Information (CSI) que integre un proceso de sanitización y filtrado digital en un servidor Flask para la detección de movimiento en espacios cerrados.
 ## Objetivos Especificos:
-    * Implementar un nodo receptor ESP32 que sea identificable por dirección MAC que capture CSI de paquetes provenientes de al menos un nodo emisor ESP32, transmitiendo los datos al servidor Flask a través del puerto serial a una tasa mayor o igual de 921600 baudios sin importar el indice de perdida de paquetes.
+    * Implementar un nodo receptor ESP32 que sea identificable por dirección MAC que capture CSI de paquetes provenientes de al menos un nodo emisor ESP32, transmitiendo los datos al servidor Flask a través del puerto serial a una tasa mayor o igual de 921600/115200baudios sin importar el indice de perdida de paquetes.
     * Componer una línea de procesamiento en el servidor Flask que mitigue las no linealidades del hardware ESP32 mediante compensación dinámica de ganancia (AGC) y sanitización de fase, realice un filtrado digital multietapa (Hampel, Butterworth) para la depuración de ruido técnico y ambiental, y aplique la sustracción de fondo para identificar perturbaciones asociadas al movimiento
 
 

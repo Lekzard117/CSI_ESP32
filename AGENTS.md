@@ -46,7 +46,7 @@ idf.py menuconfig
 # Limpiar y reconstruir desde cero
 idf.py fullclean && idf.py build
 
-# Flashear y monitorear salida serial (921600 baudios recomendado)
+# Flashear y monitorear salida serial (921600 si se aplica sdkconfig.defaults)
 idf.py -p /dev/ttyUSB0 flash monitor
 
 # Solo flashear
@@ -56,10 +56,21 @@ idf.py -p /dev/ttyUSB0 flash
 ```
 
 La configuración vive en `sdkconfig` por subproyecto (no se comparte). Ajustes clave en `menuconfig`:
-- `Serial flasher config > Custom baud rate > 921600`
+- `Serial flasher config > Custom baud rate > 921600` (default: 115200 — ver anomalía más abajo)
 - `Component config > WiFi > WiFi CSI(Channel State Information)` — debe estar habilitado
 - `Component config > FreeRTOS > Tick rate (Hz) > 1000`
 - `ESP32 CSI Tool Config` — ajustes específicos del rol
+
+**Baud rate actual**: 115200 (ambos dispositivos). El upstream recomienda 921600 pero requiere `sdkconfig.defaults` para persistir tras limpieza/reconfiguración.
+
+## Mapeo de puertos (verificado 2026-09-07)
+
+| Puerto | Dispositivo | MAC | Baud | Role |
+|---|---|---|---|---|
+| `/dev/ttyUSB0` | ESP32 #1 | FC:B4:67:F5:23:28 / 08:B6:1F:B9:90:2C | 115200 | **ACTIVE_AP** (receptor) |
+| `/dev/ttyUSB1` | ESP32 #2 | 08:B6:1F:B9:90:2D | 115200 | **ACTIVE_STA** (transmisor) |
+
+El STA se conecta a `myssid` (AP del USB0) y genera tráfico UDP. El AP captura CSI del uplink STA→AP.
 
 ## Formato de datos CSI
 
@@ -89,6 +100,55 @@ idf.py monitor | python ../python_utils/serial_plot_csi_live.py
 - Se añadió `#include "esp_mac.h"` para las macros MAC2STR/MACSTR
 
 `active_sta` aún usa `esp_spi_flash.h` — potencialmente roto en IDF 6.x.
+
+## Anomalía del baud rate y procedimiento para subir a 921600
+
+### Contexto
+
+El proveedor (README.md líneas 63-72) **recomienda 921600 baud**:
+> "The higher baud rate the better! Baud rate is extremely important to achieve high sampling rates without lag!"
+
+A 115200 baud, cada línea CSI_DATA (~500 bytes) limita la tasa real a ~9 CSI/s, muy por debajo del `PACKET_RATE=100` configurado. Subir a 921600 permite ~70-80 CSI/s reales.
+
+### Anomalía
+
+En ESP-IDF v6.0.1, los cambios manuales al `sdkconfig` se pierden al ejecutar:
+
+| Comando | Efecto sobre sdkconfig |
+|---|---|
+| `idf.py reconfigure` | Regenera desde defaults del Kconfig (115200) |
+| `idf.py menuconfig` | Requiere TTY interactivo — no funciona desde CLI |
+| `idf.py fullclean` + `idf.py build` | Genera nuevo sdkconfig con defaults (115200) |
+| `idf.py flash` | Puede invocar `reconfigure` implícitamente |
+
+El resultado es que los baud rates vuelven a 115200 tras cualquier ciclo de limpieza/reconfiguración.
+
+### Solución: `sdkconfig.defaults`
+
+ESP-IDF mergea `sdkconfig.defaults` sobre el sdkconfig incluso tras `fullclean`. Es la forma correcta de fijar valores que no se pierdan:
+
+```bash
+# En el directorio del proyecto (ej. active_ap/)
+cat > sdkconfig.defaults << 'EOF'
+CONFIG_ESPTOOLPY_MONITOR_BAUD=921600
+CONFIG_MONITOR_BAUD=921600
+CONFIG_ESP_CONSOLE_UART_BAUDRATE=921600
+CONFIG_CONSOLE_UART_BAUDRATE=921600
+# CONFIG_SHOULD_COLLECT_ONLY_LLTF is not set
+EOF
+
+# Luego limpiar y flashear (con reconfigure implícito, pero sdkconfig.defaults persiste)
+idf.py fullclean
+idf.py -p /dev/ttyUSB0 flash
+```
+
+**Nota**: `idf.py flash` invoca `reconfigure` + `build` + `flash` implícitamente, y los defaults se aplican correctamente.
+
+### Limitaciones verificadas
+
+- CP2102/CH340 en Linux soportan 921600 sin problemas — no hay limitación de hardware
+- La dificultad es **exclusivamente del flujo de compilación de ESP-IDF** en entornos no-interactivos
+- Si se trabaja desde terminal interactiva, `idf.py menuconfig` es la forma más directa
 
 ## Sincronización de tiempo
 

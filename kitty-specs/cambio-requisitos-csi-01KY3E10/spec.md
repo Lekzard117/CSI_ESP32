@@ -10,8 +10,8 @@ El formato actual de 26 campos en las líneas CSI_DATA incluye metadatos que no 
 
 ## Functional Requirements
 
-| FR | Description | Priority |
-|----|-------------|----------|
+|FR      | Description | Priority |
+|--------|-------------|----------|
 | FR-001 | Definir un subset mínimo de campos del formato CSI_DATA que preserve solo los datos esenciales para el procesamiento de señales | high |
 | FR-002 | Eliminar el campo `role` de la línea CSI_DATA; usar dirección MAC como único identificador de dispositivo | high |
 | FR-003 | Evaluar y recomendar una tasa de baudios óptima que balancee throughput y confiabilidad serial | high |

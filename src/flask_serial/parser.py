@@ -1,3 +1,4 @@
+# -- Convertir una línea CSV cruda del ESP32 en un objeto CsiLine.
 from typing import List, Optional
 
 from flask_serial.models import CsiLine, Role
@@ -6,14 +7,28 @@ from flask_serial.models import CsiLine, Role
 def parse_line(raw: str) -> CsiLine:
     parts = raw.strip().split(",")
 
-    if len(parts) < 26:
-        raise ValueError(f"Expected >=26 fields (25 metadata + CSI_DATA), got {len(parts)}")
+    if len(parts) < 25: # indica que esta línea solo tiene 1 coma después de dividir, es decir, el contenido de la línea es similar a CSI_DATA,###, carece completamente de datos CSI y campos de metadatos.
+        raise ValueError(f"Expected >=26 fields (25 metadata + CSI_DATA), got {len(parts)}, pueden paquetes de sincronización/calibración o marcos incompletos del firmware")
 
     if parts[0] != "CSI_DATA":
         raise ValueError(f"Invalid prefix: {parts[0]}")
 
+    csi_index = None
+    for i, p in enumerate(parts):
+        if p.strip().startswith("["):
+            csi_index = i
+            break
+
+    if csi_index is None:
+        raise ValueError ("No CSI bracket field found")
+    
     csi_raw = parts[25]
     csi_values = _parse_csi_bracket(csi_raw)
+
+    meta = parts[:csi_index]
+
+    while len(meta) < 25:
+        meta.append("")
 
     line = CsiLine(
         type=parts[0],
@@ -43,7 +58,6 @@ def parse_line(raw: str) -> CsiLine:
         len=_int(parts[24]),
         csi_data=csi_values,
     )
-
     return line
 
 

@@ -5,7 +5,6 @@
 
 ## Requisitos funcionales:
     - El receptor debe ser identificable por MAC y capturar CSI de al menos un emisor
-    - Transmisión serial a 921600 baudios sin importar pérdida de paquetes
     - Pipeline de procesamiento: compensación AGC → sanitización de fase → filtrado Hampel → filtrado Butterworth → sustracción de fondo
     - Identificación de subportadoras con mayor SSNR
     - Almacenamiento de datos en CSV/MAT

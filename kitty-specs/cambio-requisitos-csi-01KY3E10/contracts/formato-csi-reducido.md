@@ -28,8 +28,8 @@ CSI_DATA,aa:bb:cc:dd:ee:ff,-65,6,12345678,0,52,[+1, +2, -3, +4]
 
 | Campo | Tipo Python | Regex/Tipo C |
 |-------|-------------|--------------|
-| mac | str | `char[18]` |
-| rssi | int | `int8_t` |
+| mac   | str | `char[18]` |
+| rssi    | int | `int8_t` |
 | channel | int | `uint8_t` |
 | local_timestamp | int | `uint32_t` |
 | ant | int | `uint8_t` |

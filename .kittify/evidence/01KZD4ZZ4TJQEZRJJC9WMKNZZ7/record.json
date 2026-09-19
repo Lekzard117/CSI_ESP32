@@ -1,0 +1,8 @@
+{
+  "event": "completed",
+  "invocation_id": "01KZD4ZZ4TJQEZRJJC9WMKNZZ7",
+  "completed_at": "2026-08-07T03:49:05.637430+00:00",
+  "outcome": "done",
+  "closed_by": "agent",
+  "evidence_ref": "tests/test_pipeline.py"
+}

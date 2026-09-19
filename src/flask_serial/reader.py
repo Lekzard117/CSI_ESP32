@@ -1,3 +1,4 @@
+# - Abrir el puerto serial, leer bytes, ensamblar líneas y emitir CsiLine.
 from __future__ import annotations
 
 import logging
@@ -101,11 +102,21 @@ class SerialReader:
                 self.reconnect()
 
 
+#def create_readers() -> List[SerialReader]:
+    #ports_str = os.getenv("SERIAL_PORTS", "/dev/ttyUSB0")
+    #readers: List[SerialReader] = []
+    #for port in ports_str.split(","):
+        #port = port.strip()
+        #if port:
+            #readers.append(SerialReader(port, baud=921600))
+    #return readers
 def create_readers() -> List[SerialReader]:
     ports_str = os.getenv("SERIAL_PORTS", "/dev/ttyUSB0")
-    readers: List[SerialReader] = []
+    baud = int(os.getenv("SERIAL_BAUD", "115200"))  # ⚠️
+    readers = []
     for port in ports_str.split(","):
         port = port.strip()
         if port:
-            readers.append(SerialReader(port, baud=921600))
+            readers.append(SerialReader(port, baud=baud))
     return readers
+ 

@@ -10,7 +10,6 @@ class Role(Enum):
     PASSIVE = "PASSIVE"
     STA = "STA"
 
-
 @dataclass
 class CsiLine:
     type: str = "CSI_DATA"

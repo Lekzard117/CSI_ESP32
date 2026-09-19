@@ -4,18 +4,18 @@
 
 ### Análisis de cada campo del formato original (26 campos)
 
-| # | Campo | Utilidad | Decisión |
-|---|-------|----------|----------|
-| 0 | type | Siempre "data" para CSI | Eliminar |
-| 1 | role | Identificador de rol | Eliminar (MAC suficiente) |
-| 2 | mac | Dirección MAC del dispositivo | **Conservar** — identificador único |
-| 3 | rssi | Potencia de señal (dBm) | **Conservar** — filtro de calidad + detección complementaria |
-| 4 | rate | Tasa de datos WiFi | Eliminar |
-| 5 | sig_mode | Modo de señal | Eliminar |
-| 6 | mcs | Modulation Coding Scheme | Eliminar |
-| 7 | bandwidth | Ancho de banda | Eliminar |
-| 8 | smoothing | Smoothing flag | Eliminar |
-| 9 | not_sounding | Sounding flag | Eliminar |
+| #  | Campo | Utilidad | Decisión |
+|----|-------|----------|----------|
+| 0  | type | Siempre "data" para CSI | Eliminar |
+| 1  | role | Identificador de rol | Eliminar (MAC suficiente) |
+| 2  | mac | Dirección MAC del dispositivo | **Conservar** — identificador único |
+| 3  | rssi | Potencia de señal (dBm) | **Conservar** — filtro de calidad + detección complementaria |
+| 4  | rate | Tasa de datos WiFi | Eliminar |
+| 5  | sig_mode | Modo de señal | Eliminar |
+| 6  | mcs | Modulation Coding Scheme | Eliminar |
+| 7  | bandwidth | Ancho de banda | Eliminar |
+| 8  | smoothing | Smoothing flag | Eliminar |
+| 9  | not_sounding | Sounding flag | Eliminar |
 | 10 | aggregation | Agregación | Eliminar |
 | 11 | stbc | STBC flag | Eliminar |
 | 12 | fec_coding | FEC coding | Eliminar |
