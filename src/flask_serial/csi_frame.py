@@ -2,6 +2,12 @@
 
 Un CsiLine crudo (lista de ints I/Q intercalados) se convierte en un
 CsiFrame con un vector complejo de 64 subportadoras y su amplitud.
+
+rssi	Diagnóstico	✅ Sí, filtrar
+noise_floor	Diagnóstico	⚠️ Puede omitirse
+rate, mcs, bandwidth, sig_mode, rx_state, ant, type	Constantes	✅ Sí, descartar
+smoothing, not_sounding, aggregation, stbc, fec_coding, sgi	Constantes	✅ Sí, descartar
+ampdu_cnt, secondary_channel	Diagnóstico	✅ Sí, descartar
 """
 from __future__ import annotations
 
@@ -25,12 +31,16 @@ class CsiFrame:
     timestamp: float                    # real_timestamp o local_timestamp
     source_mac: Optional[str]           # MAC del emisor (None si nula)
     rssi: Optional[int]
-    noise_floor: Optional[int]
-    channel: Optional[int]
+
     local_timestamp: Optional[int]
+    channel: Optional[int]
+    noise_floor: Optional[int]
 
     subcarriers: np.ndarray             # shape (64,), dtype complex64
     amplitudes: np.ndarray              # shape (64,), dtype float32
+
+    agc_gain_db: Optional[float] = None
+    fft_gain_db: Optional[float] = None
 
     # Métricas de calidad
     n_valid: int = 0                    # subportadoras no nulas
@@ -44,10 +54,14 @@ class CsiFrame:
         timestamp: float,
         source_mac: Optional[str] = None,
         rssi: Optional[int] = None,
-        noise_floor: Optional[int] = None,
-        channel: Optional[int] = None,
         local_timestamp: Optional[int] = None,
+        channel: Optional[int] = None,
+        noise_floor: Optional[int]= None,
+        agc_gain_db: Optional[float] = None,
+        fft_gain_db: Optional[float] = None,
+        
         trim_guard: bool = True,
+        compensate_agc: bool = True,
     ) -> "CsiFrame":
         """Convierte la lista cruda [imag0, real0, imag1, real1, ...] a complejo.
 
@@ -82,6 +96,15 @@ class CsiFrame:
         if trim_guard:
             z = z[GUARD_LOW:N_SUBCARRIERS - GUARD_HIGH]
 
+        # LA COMPENSACIÓN AGC =====================================================
+        amplitudes = np.abs(z).astype(np.float32)
+
+        if compensate_agc and agc_gain_db is not None and agc_gain_db > 0:
+            # rho = 1 / 10^(AGC/20)
+            rho = float(10 ** (-agc_gain_db / 20.0))
+            z = z * rho
+            amplitudes = amplitudes * rho
+
         # Detectar validez: al menos 1 subportadora no nula
         n_valid = int(np.count_nonzero(np.abs(z)))
         is_valid = n_valid > 0
@@ -94,9 +117,11 @@ class CsiFrame:
             channel=channel,
             local_timestamp=local_timestamp,
             subcarriers=z,
-            amplitudes=np.abs(z).astype(np.float32),
+            amplitudes=amplitudes,
             n_valid=n_valid,
             is_valid=is_valid,
+            agc_gain_db=agc_gain_db,
+            fft_gain_db=fft_gain_db,
         )
 
     @property

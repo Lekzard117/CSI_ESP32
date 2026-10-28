@@ -22,48 +22,46 @@ def parse_line(raw: str) -> CsiLine:
     # Estrategia: localizar el bracket CSI directamente
     bracket_match = _BRACKET_RE.search(raw)
     if not bracket_match:
-        raise ValueError(f"no CSI bracket found: {raw[:40]}")
+        raise ValueError(f"No hay CSI bracket : {raw[:40]}")
 
     csi_raw = bracket_match.group(0)
     csi_values = _parse_csi_bracket(csi_raw)
 
     # Los metadatos están ANTES del bracket
-    meta_raw = raw[:bracket_match.start()].rstrip(",")
+    meta_raw = raw[:bracket_match.start()].rstrip(" ,")
     parts = meta_raw.split(",") if meta_raw else []
 
     if not parts or parts[0] != "CSI_DATA":
-        raise ValueError(f"invalid prefix: {parts[0][:20] if parts else 'EMPTY'}")
+        raise ValueError(f"invalido prefix: {parts[0][:20] if parts else 'EMPTY'}")
 
-    # Rellenar hasta 25 campos
-    while len(parts) < 25:
+    # Hasta 27 campos
+    while len(parts) < 27:
         parts.append("")
 
     line = CsiLine(
+
         type=parts[0],
         role=Role(parts[1]) if parts[1] in {"AP", "PASSIVE", "STA"} else None,
         mac=parts[2] if parts[2] else None,
+
+        # Calidad
         rssi=_int(parts[3]),
-        rate=_int(parts[4]),
-        sig_mode=_int(parts[5]),
-        mcs=_int(parts[6]),
-        bandwidth=_int(parts[7]),
-        smoothing=_bool(parts[8]),
-        not_sounding=_bool(parts[9]),
-        aggregation=_bool(parts[10]),
-        stbc=_bool(parts[11]),
-        fec_coding=_bool(parts[12]),
-        sgi=_bool(parts[13]),
-        noise_floor=_int(parts[14]),
-        ampdu_cnt=_int(parts[15]),
+        noise_floor=_int(parts[14]), 
+        # Sincronización
         channel=_int(parts[16]),
-        secondary_channel=_int(parts[17]),
         local_timestamp=_int(parts[18]),
-        ant=_int(parts[19]),
-        sig_len=_int(parts[20]),
-        rx_state=_int(parts[21]),
         real_time_set=_bool(parts[22]),
         real_timestamp=_float(parts[23]),
+
+        # Estructura
+        sig_len=_int(parts[20]),
         len=_int(parts[24]),
+
+        # Calibración hardware
+        agc_gain=_float(parts[25]),
+        fft_gain=_float(parts[26]),
+
+        # Datos primarios
         csi_data=csi_values,
     )
     return line

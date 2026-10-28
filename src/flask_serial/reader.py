@@ -45,6 +45,7 @@ class SerialReader:
                 parity=serial.PARITY_NONE,
                 stopbits=serial.STOPBITS_ONE,
                 timeout=1,
+                exclusive=True,
             )
             self.last_rx = time.time()
             logger.info(f"Connected to {self.port} at {self.baud} baud")
@@ -133,7 +134,7 @@ class SerialReader:
                 self.reconnect()
 
 def create_readers() -> List[SerialReader]:
-    ports_str = os.getenv("SERIAL_PORTS", "/dev/ttyUSB0")
+    ports_str = os.getenv("SERIAL_PORTS", "/dev/ttyACM0")
     baud = int(os.getenv("SERIAL_BAUD", "921600"))  # ⚠️
     readers = []
     for port in ports_str.split(","):
@@ -141,4 +142,3 @@ def create_readers() -> List[SerialReader]:
         if port:
             readers.append(SerialReader(port, baud=baud))
     return readers
- 

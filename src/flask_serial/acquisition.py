@@ -127,6 +127,8 @@ class AcquisitionWorker:
                 channel=line.channel,
                 local_timestamp=line.local_timestamp,
                 trim_guard=self.trim_guard,
+                agc_gain_db=line.agc_gain,
+                fft_gain_db=line.fft_gain,
             )
         except Exception:
             logger.exception("Failed to build CsiFrame")

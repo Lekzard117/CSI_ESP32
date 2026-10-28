@@ -4,6 +4,12 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import List, Optional
 
+"""
+rssi	Diagnóstico	✅ Sí, filtrar
+noise_floor	Diagnóstico	⚠️ Puede omitirse
+rate, mcs, bandwidth, sig_mode, rx_state, ant, type	Constantes	✅ Sí, descartar
+smoothing, not_sounding, aggregation, stbc, fec_coding, sgi	Constantes	✅ Sí, descartar
+ampdu_cnt, secondary_channel	Diagnóstico	✅ Sí, descartar"""
 
 class Role(Enum):
     AP = "AP"
@@ -12,29 +18,28 @@ class Role(Enum):
 
 @dataclass
 class CsiLine:
+    # --- Identidad / enrutamiento ---
     type: str = "CSI_DATA"
     role: Optional[Role] = None
     mac: Optional[str] = None
+
+    # --- Calidad de canal ---
     rssi: Optional[int] = None
-    rate: Optional[int] = None
-    sig_mode: Optional[int] = None
-    mcs: Optional[int] = None
-    bandwidth: Optional[int] = None
-    smoothing: Optional[bool] = None
-    not_sounding: Optional[bool] = None
-    aggregation: Optional[bool] = None
-    stbc: Optional[bool] = None
-    fec_coding: Optional[bool] = None
-    sgi: Optional[bool] = None
-    noise_floor: Optional[int] = None
-    ampdu_cnt: Optional[int] = None
+    noise_floor: Optional[int] = None 
+    # --- Sincronización ---
     channel: Optional[int] = None
-    secondary_channel: Optional[int] = None
     local_timestamp: Optional[int] = None
-    ant: Optional[int] = None
-    sig_len: Optional[int] = None
-    rx_state: Optional[int] = None
-    real_time_set: Optional[bool] = None
     real_timestamp: Optional[float] = None
+    real_time_set: Optional[bool] = None
+
+    # --- Longitud / estructura ---
+    sig_len: Optional[int] = None
     len: Optional[int] = None
+
+    # --- Calibración hardware (críticos para AGC) ---
+    agc_gain: Optional[float] = None      # ← NUEVO
+    fft_gain: Optional[float] = None      # ← NUEVO
+
+    # --- Datos primarios ---
     csi_data: List[int] = field(default_factory=list)
+# agc_gain en tus logs aparece como 50, 78, 79. Puede ser int o float; usar Optional[float] es más flexible.
