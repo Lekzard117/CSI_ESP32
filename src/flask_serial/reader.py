@@ -15,7 +15,10 @@ from flask_serial.parser import parse_line
 logger = logging.getLogger(__name__)
 
 RECONNECT_DELAY = 2
-TIMEOUT_SECONDS = 5
+TIMEOUT_SECONDS = 40
+
+# Cada cuántos errores loggear un resumen (evita inundar consola)
+ERROR_LOG_EVERY = 50
 
 
 class SerialReader:
@@ -27,7 +30,12 @@ class SerialReader:
         self.line_count = 0
         self.error_count = 0
         self.last_rx = 0.0
+        self._errors_since_log = 0
+        self._last_error_sample = ""
 
+    # ------------------------------------------------------------------ #
+    # Conexión
+    # ------------------------------------------------------------------ #
     def connect(self) -> bool:
         try:
             self._ser = serial.Serial(
@@ -65,20 +73,39 @@ class SerialReader:
         time.sleep(RECONNECT_DELAY)
         self.connect()
 
+    # ------------------------------------------------------------------ #
+    # Parseo de líneas
+    # ------------------------------------------------------------------ #
     def _flush_lines(self) -> Generator[CsiLine, None, None]:
         while b"\n" in self._buffer:
             raw_bytes, self._buffer = self._buffer.split(b"\n", 1)
             raw_str = raw_bytes.decode("utf-8", errors="replace").strip()
-            if not raw_str:
+
+            # Línea demasiado corta → basura, contar pero no loggear
+            if not raw_str or len(raw_str) < 20:
+                self.error_count += 1
+                self._errors_since_log += 1
                 continue
+
             try:
                 line = parse_line(raw_str)
                 self.line_count += 1
                 yield line
             except ValueError as e:
                 self.error_count += 1
-                logger.warning(f"Parse error on {self.port}: {e}")
+                self._errors_since_log += 1
+                self._last_error_sample = str(e)
+                # Log agrupado: solo cada ERROR_LOG_EVERY errores
+                if self._errors_since_log >= ERROR_LOG_EVERY:
+                    logger.warning(
+                        f"[{self.port}] {self._errors_since_log} parse errors "
+                        f"acumulados. Último: {self._last_error_sample}"
+                    )
+                    self._errors_since_log = 0
 
+    # ------------------------------------------------------------------ #
+    # Loop principal
+    # ------------------------------------------------------------------ #
     def lines(self) -> Generator[CsiLine, None, None]:
         if not self.is_connected:
             raise RuntimeError("Not connected. Call connect() first")
@@ -94,25 +121,20 @@ class SerialReader:
                     self._buffer.extend(data)
                     yield from self._flush_lines()
                 else:
+                    # read() vacío NO siempre es error: solo si pasó TIMEOUT
                     if time.time() - self.last_rx > TIMEOUT_SECONDS:
                         logger.warning(f"Timeout on {self.port}")
                         self.reconnect()
+                    else:
+                        # Pequeña pausa para no busy-loop
+                        time.sleep(0.001)
             except SerialException as e:
                 logger.error(f"Serial error on {self.port}: {e}")
                 self.reconnect()
 
-
-#def create_readers() -> List[SerialReader]:
-    #ports_str = os.getenv("SERIAL_PORTS", "/dev/ttyUSB0")
-    #readers: List[SerialReader] = []
-    #for port in ports_str.split(","):
-        #port = port.strip()
-        #if port:
-            #readers.append(SerialReader(port, baud=921600))
-    #return readers
 def create_readers() -> List[SerialReader]:
     ports_str = os.getenv("SERIAL_PORTS", "/dev/ttyUSB0")
-    baud = int(os.getenv("SERIAL_BAUD", "115200"))  # ⚠️
+    baud = int(os.getenv("SERIAL_BAUD", "921600"))  # ⚠️
     readers = []
     for port in ports_str.split(","):
         port = port.strip()

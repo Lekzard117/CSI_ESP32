@@ -36,8 +36,9 @@ def create_app(config: dict | None = None) -> Flask:
         app.config.update(config)
 
     # Registrar blueprints / rutas
-    from flask_serial.routes import health, commands, processing, stream
-  
+    from flask_serial.routes import health, commands, processing, stream, main
+    app.register_blueprint(main.bp)  
+    app.register_blueprint(health.bp)
     app.register_blueprint(commands.bp)
     app.register_blueprint(processing.bp)
     app.register_blueprint(stream.bp)

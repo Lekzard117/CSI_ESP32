@@ -1,19 +1,25 @@
 """Modular CSI processing pipeline.
 
 Stages are functions of signature ``(data, ...) -> data`` grouped into a
-reorderable DSL. Input is a time-window matrix shaped
-``(n_frames, n_subcarriers)`` of complex CSI I/Q samples; the terminal stage
+reorderable DSL. 
+
+Input is a time-window matrix shaped``(n_frames, n_subcarriers)`` of complex CSI I/Q samples; the terminal stage
 produces a per-timestep motion score.
 
 Amplitude extraction intentionally does **not** use ``CSIKit.get_CSI`` /
 ``get_metadata``: those crash on single-antenna streams (``TypeError: only
-0-dimensional arrays can be converted to Python scalars``). We read
-``frame.csi_matrix`` directly and squeeze, matching the ESP32 single-RX layout.
+0-dimensional arrays can be converted to Python scalars``). 
+
+Se lee``frame.csi_matrix`` directly and squeeze, matching the ESP32 single-RX layout.
 
 ``hampel_filter`` is implemented locally rather than relying on
 ``CSIKit.util.filters.hampel``, whose rolling window includes the very sample
 being tested (``csi[index-k:index+k]``) so an outlier never falls outside its
 own median/std and is never removed.
+"""
+
+"""
+L
 """
 from __future__ import annotations
 

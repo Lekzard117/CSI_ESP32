@@ -1,34 +1,42 @@
 # -- Convertir una línea CSV cruda del ESP32 en un objeto CsiLine.
+from __future__ import annotations
+
+import re
 from typing import List, Optional
 
 from flask_serial.models import CsiLine, Role
 
+# Parser tolerante con regex: tolera espacios, tabs, comas, tokens corruptos.
+# Nota: si en el futuro se sube el baud a 921600, esta tolerancia sigue siendo
+# útil porque el framing serial puede seguir partiendo números.
+
+_NUMBER_RE = re.compile(r"-?\d+")
+_BRACKET_RE = re.compile(r"\[([^\]]*)\]")
+
 
 def parse_line(raw: str) -> CsiLine:
-    parts = raw.strip().split(",")
+    raw = raw.strip()
+    if not raw:
+        raise ValueError("empty line")
 
-    if len(parts) < 25: # indica que esta línea solo tiene 1 coma después de dividir, es decir, el contenido de la línea es similar a CSI_DATA,###, carece completamente de datos CSI y campos de metadatos.
-        raise ValueError(f"Expected >=26 fields (25 metadata + CSI_DATA), got {len(parts)}, pueden paquetes de sincronización/calibración o marcos incompletos del firmware")
+    # Estrategia: localizar el bracket CSI directamente
+    bracket_match = _BRACKET_RE.search(raw)
+    if not bracket_match:
+        raise ValueError(f"no CSI bracket found: {raw[:40]}")
 
-    if parts[0] != "CSI_DATA":
-        raise ValueError(f"Invalid prefix: {parts[0]}")
-
-    csi_index = None
-    for i, p in enumerate(parts):
-        if p.strip().startswith("["):
-            csi_index = i
-            break
-
-    if csi_index is None:
-        raise ValueError ("No CSI bracket field found")
-    
-    csi_raw = parts[25]
+    csi_raw = bracket_match.group(0)
     csi_values = _parse_csi_bracket(csi_raw)
 
-    meta = parts[:csi_index]
+    # Los metadatos están ANTES del bracket
+    meta_raw = raw[:bracket_match.start()].rstrip(",")
+    parts = meta_raw.split(",") if meta_raw else []
 
-    while len(meta) < 25:
-        meta.append("")
+    if not parts or parts[0] != "CSI_DATA":
+        raise ValueError(f"invalid prefix: {parts[0][:20] if parts else 'EMPTY'}")
+
+    # Rellenar hasta 25 campos
+    while len(parts) < 25:
+        parts.append("")
 
     line = CsiLine(
         type=parts[0],
@@ -62,20 +70,25 @@ def parse_line(raw: str) -> CsiLine:
 
 
 def _parse_csi_bracket(raw: str) -> List[int]:
+    """Extrae TODOS los enteros del interior del bracket.
+
+    Tolerante a:
+      '-3-31'  → [-3, -31]   (token partido por framing serial)
+      '   '    → []
+      '[1 2]'  → [1, 2]
+    """
     raw = raw.strip()
     if not raw.startswith("[") or not raw.endswith("]"):
-        raise ValueError(f"CSI_DATA must be bracket-delimited [...], got: {raw[:20]}")
-    inner = raw[1:-1].strip()
-    if not inner:
-        return []
-    return [int(v) for v in inner.split()]
+        raise ValueError(f"not bracket-delimited: {raw[:20]}")
+    inner = raw[1:-1]
+    return [int(v) for v in _NUMBER_RE.findall(inner)]
 
 
 def _int(v: str) -> Optional[int]:
-    try:
-        return int(v)
-    except (ValueError, TypeError):
+    if not v:
         return None
+    m = _NUMBER_RE.fullmatch(v.strip())
+    return int(m.group()) if m else None
 
 
 def _float(v: str) -> Optional[float]:

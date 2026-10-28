@@ -28,7 +28,7 @@
 .kittify/runtime/
 .kittify/sync-state.json
 .kittify/workspaces/
-ESP32-CSI-Tool
+
 .worktrees/
 
 ###=============
@@ -49,12 +49,12 @@ DocLatex/**/*.aux
 DocLatex/**/*.log
 DocLatex/**/*.pdf
 DocLatex/**/*.out
-
+*.txt
 __pycache__/
 *.pyc
 .pytest_cache/
 *.egg-info/
-
+*kate-swp
 ESP32-CSI-Tool/build/
 Tinycsi-csirapiddevelopment/build/
 

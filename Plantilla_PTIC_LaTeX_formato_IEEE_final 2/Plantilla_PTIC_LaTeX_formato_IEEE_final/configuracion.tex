@@ -1,0 +1,64 @@
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{pdflscape}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{caption}
+% \usepackage{cite} % desactivado
+
+\usepackage[
+  backend=biber,
+  style=ieee,
+  language=spanish,
+  bibencoding=utf8
+]{biblatex}
+\addbibresource{bibliografia.bib}
+
+\DefineBibliographyStrings{spanish}{
+  references = {}
+}
+
+\usepackage [hidelinks]{hyperref}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{float}
+\usepackage{pdfpages}
+\usepackage{fancyhdr}
+\usepackage[font=footnotesize,justification=centering,labelsep=period]{caption}
+
+
+
+\geometry{margin=2.5cm}
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+\bibliography{IEEEtranDOI}
+
+
+\captionsetup[table]{name=Tabla}
+\renewcommand{\thetable}{\Roman{table}} % tablas en números romanos
+
+\captionsetup[figure]{name=Figura}
+\addto\captionsspanish{
+  \renewcommand{\listtablename}{Índice de Tablas}
+  \renewcommand{\listfigurename}{Índice de Figuras}
+}
+\newcommand{\tituloproyecto}{Título del Proyecto de Investigación de Integración Curricular}
+\newcommand{\nombreautor}{Nombres y Apellidos del Estudiante}
+\newcommand{\correoautor}{correo@unl.edu.ec}
+\newcommand{\nombresasesor}{Nombres y Apellidos  del Asesor}
+\newcommand{\correoasesor}{asesor@unl.edu.ec}
+\newcommand{\nombreprofesor}{Oscar Miguel Cumbicus Pineda}
+
+% Estilo de numeración de página en minúscula y alineada a la derecha
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[R]{\thepage}
+\renewcommand{\thepage}{\roman{page}} % numeral romano minúscula
+

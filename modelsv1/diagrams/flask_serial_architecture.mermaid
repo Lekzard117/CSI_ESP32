@@ -1,0 +1,51 @@
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#ff9900", "secondaryColor": "#666666", "tertiaryColor": "#ffffff"}}}%%
+graph TD
+    %% Data Sources
+    ESP32[ESP32 Device<br/>(active_ap)]
+    UART[UART Port<br/>/dev/ttyUSB0]
+    
+    %% Core Components
+    Reader[reader.py<br/>(SerialReader)]
+    Parser[parser.py<br/>(CsiLine parser)]
+    Models[models.py<br/>(CsiLine dataclass)]
+    Stats[stats.py<br/>(Statistics)]
+    Pipeline[pipeline.py<br/>(Processing)]
+    Flask[Flask API<br/>(REST endpoints)]
+    
+    %% Connections
+    ESP32 -- "CSI_DATA lines" --> UART
+    UART -- "Serial read" --> Reader
+    Reader -- "CsiLine objects" --> Parser
+    Parser -- "Validated CsiLine" --> Models
+    Models -- "Parsed data" --> Stats
+    Stats -- "Filtered frames" --> Pipeline
+    Pipeline -- "Processed data" --> Flask
+    
+    %% Processing Flow
+    subgraph "Data Processing Flow"
+        Reader --> Parser --> Models --> Stats --> Pipeline
+    end
+    
+    %% Key Features
+    subgraph "Key Features"
+        Filter[MAC Filtering<br/>(00:00:00:00:00:00)]
+        StatsCounters[Statistics Counters<br/>(frames_validos, frames_mac_nula)]
+        StreamDetection[Stream Interruption<br/>Detection]
+    end
+    
+    Stats -.-> Filter
+    Stats -.-> StatsCounters
+    Reader -.-> StreamDetection
+    
+    style ESP32 fill:#ff9900,stroke:#333
+    style UART fill:#666666,stroke:#333
+    style Reader fill:#4444ff,stroke:#333
+    style Parser fill:#4444ff,stroke:#333
+    style Models fill:#4444ff,stroke:#333
+    style Stats fill:#4444ff,stroke:#333
+    style Pipeline fill:#4444ff,stroke:#333
+    style Flask fill:#00cc66,stroke:#333
+    
+    style Filter fill:#ff0000,stroke:#333
+    style StatsCounters fill:#ff0000,stroke:#333
+    style StreamDetection fill:#ff0000,stroke:#333
