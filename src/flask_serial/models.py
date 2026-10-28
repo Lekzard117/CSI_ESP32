@@ -21,13 +21,16 @@ class CsiLine:
     # --- Identidad / enrutamiento ---
     type: str = "CSI_DATA"
     role: Optional[Role] = None
-    mac: Optional[str] = None
+    mac: Optional[str] = None # permite segregar los buffers en múltiples nodos emisores.
 
     # --- Calidad de canal ---
     rssi: Optional[int] = None
     noise_floor: Optional[int] = None 
     # --- Sincronización ---
     channel: Optional[int] = None
+
+    # ---  control de la tasa de muestreo (approx 100Hz}) 
+    # ordenamiento cronológico para calcular las ventanas deslizantes de varianza dinámica 
     local_timestamp: Optional[int] = None
     real_timestamp: Optional[float] = None
     real_time_set: Optional[bool] = None
@@ -37,9 +40,11 @@ class CsiLine:
     len: Optional[int] = None
 
     # --- Calibración hardware (críticos para AGC) ---
+    #se usa la ecuación de escalado lineal inverso rho = 1 / 10^(AGC/20) sobre cada muestra de csi_data
+
     agc_gain: Optional[float] = None      # ← NUEVO
     fft_gain: Optional[float] = None      # ← NUEVO
 
     # --- Datos primarios ---
     csi_data: List[int] = field(default_factory=list)
-# agc_gain en tus logs aparece como 50, 78, 79. Puede ser int o float; usar Optional[float] es más flexible.
+# agc_gain en logs de ejmplo aparece como 50, 78, 79. Puede ser int o float; usar Optional[float] es más flexible.

@@ -73,6 +73,7 @@ class CsiFrame:
         Nota: algunos forks emiten [I0, Q0, ...]. Si los scores salen
         invertidos, cambiar `real = arr[0::2]`.
         """
+        #lista de enteros I/Q a arreglo NumPy float
         arr = np.asarray(csi_data, dtype=np.float32)
 
         # Truncar a longitud par (por seguridad si llega impar)
@@ -96,7 +97,7 @@ class CsiFrame:
         if trim_guard:
             z = z[GUARD_LOW:N_SUBCARRIERS - GUARD_HIGH]
 
-        # LA COMPENSACIÓN AGC =====================================================
+        # LA COMPENSACIÓN AGC ===========================================================================
         amplitudes = np.abs(z).astype(np.float32)
 
         if compensate_agc and agc_gain_db is not None and agc_gain_db > 0:

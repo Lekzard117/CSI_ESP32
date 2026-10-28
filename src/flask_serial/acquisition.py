@@ -29,7 +29,7 @@ class AcquisitionWorker:
         window: CsiWindow,
         *,
         trim_guard: bool = True,
-        skip_null_mac: bool = False,
+        skip_null_mac: bool = True,
     ):
         self.reader = reader
         self.window = window
