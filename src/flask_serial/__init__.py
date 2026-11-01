@@ -30,6 +30,7 @@ def create_app(config: dict | None = None) -> Flask:
         #PIPELINE_KEEP_SUBCARRIERS=int(os.getenv("PIPELINE_KEEP_SUBCARRIERS", "2")),
         PIPELINE_N_SUBCARRIERS=int(os.getenv("PIPELINE_N_SUBCARRIERS", "53")),
         PIPELINE_TRIM_GUARD=os.getenv("PIPELINE_TRIM_GUARD", "1") == "1",
+        PIPELINE_COMPENSATE_AGC=os.getenv("PIPELINE_COMPENSATE_AGC", "0") == "1", 
 
     )
     if config:
@@ -47,6 +48,7 @@ def create_app(config: dict | None = None) -> Flask:
         state_module.app_state = state_module.AppState(
             window_size=app.config["PIPELINE_WINDOW_SIZE"],
             n_subcarriers=app.config["PIPELINE_N_SUBCARRIERS"],
+            compensate_agc=app.config["PIPELINE_COMPENSATE_AGC"],
         )
         state_module.app_state.start()
         atexit.register(state_module.app_state.stop)

@@ -30,18 +30,20 @@ class AcquisitionWorker:
         *,
         trim_guard: bool = True,
         skip_null_mac: bool = True,
+        compensate_agc: bool = True,
     ):
         self.reader = reader
         self.window = window
         self.trim_guard = trim_guard
         self.skip_null_mac = skip_null_mac
+        self.compensate_agc = compensate_agc
 
         self._thread: Optional[threading.Thread] = None
         self._stop_event = threading.Event()
         self._last_frame_ts: float = 0.0
         self._frames_ingested: int = 0
         self._frames_dropped: int = 0
-
+        
     # ------------------------------------------------------------------ #
     # Ciclo de vida
     # ------------------------------------------------------------------ #
@@ -131,6 +133,7 @@ class AcquisitionWorker:
                 trim_guard=self.trim_guard,
                 agc_gain_db=line.agc_gain,
                 fft_gain_db=line.fft_gain,
+                compensate_agc=self.compensate_agc,
             )
         except Exception:
             logger.exception("Failed to build CsiFrame")
@@ -149,4 +152,5 @@ class AcquisitionWorker:
             "last_frame_age_s": (
                 time.time() - self._last_frame_ts if self._last_frame_ts else None
             ),
+            "compensate_agc": self.compensate_agc, 
         }

@@ -11,11 +11,12 @@ logger = logging.getLogger(__name__)
 
 
 class AppState:
-    def __init__(self, window_size: int = 100, n_subcarriers: int = 53):
+    def __init__(self, window_size: int = 100, n_subcarriers: int = 53, compensate_agc: bool = True,):
         self.readers: Dict[str, SerialReader] = {}
         self.workers: Dict[str, AcquisitionWorker] = {}
         self.store = WindowStore(window_size=window_size, n_subcarriers=n_subcarriers)
         self._started = False
+        self.compensate_agc = compensate_agc
 
     def start(self) -> None:
         if self._started:
@@ -26,7 +27,7 @@ class AppState:
                 continue
 
             window = self.store.get_or_create(reader.port)
-            worker = AcquisitionWorker(reader, window)
+            worker = AcquisitionWorker(reader, window, compensate_agc=self.compensate_agc,) #============
             worker.start()
 
             self.readers[reader.port] = reader
