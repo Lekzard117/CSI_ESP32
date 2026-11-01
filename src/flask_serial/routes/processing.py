@@ -54,6 +54,7 @@ def latest():
         "rssi": snap.rssi.tolist(),
         "macs": snap.macs,
         "amplitudes": snap.amplitudes.tolist(),
+        "agc_gains": snap.agc_gains.tolist(),
     })
 
 

@@ -67,10 +67,12 @@ class AcquisitionWorker:
     # Loop principal
     # ------------------------------------------------------------------ #
     def _run(self) -> None:
+        last_warning_time = 0.0
         while not self._stop_event.is_set():
             try:
                 if not self.reader.is_connected:
-                    if not self.reader.connect():
+                    success = self.reader.connect()
+                    if not success:
                         time.sleep(2.0)
                         continue
 

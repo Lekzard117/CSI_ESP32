@@ -48,10 +48,17 @@ class SerialReader:
                 exclusive=True,
             )
             self.last_rx = time.time()
-            logger.info(f"Connected to {self.port} at {self.baud} baud")
+            logger.info(f"✅ Conectado a {self.port} a {self.baud} baudios")
             return True
-        except SerialException:
-            logger.exception(f"Failed to connect to {self.port}")
+        except SerialException as e:
+            # 👇 AQUÍ GESTIONAMOS LA EXCEPCIÓN AMIGABLEMENTE 👇
+            if "No such file or directory" in str(e):
+                logger.warning(f"⚠️  Puerto {self.port} no encontrado. ¿El ESP32 está desconectado?")
+            elif "Permission denied" in str(e) or "exclusive" in str(e):
+                logger.warning(f"⚠️  Puerto {self.port} ocupado por otro programa. Ciérralo e intenta de nuevo.")
+            else:
+                logger.warning(f"⚠️  Error al conectar a {self.port}: {e}")
+            
             self._ser = None
             return False
 
