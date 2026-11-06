@@ -98,6 +98,7 @@ class CsiWindowSnapshot:
         macs: List[Optional[str]],
         rssi: np.ndarray,
         agc_gains: np.ndarray,
+        noise_floors: np.ndarray,
     ):
         self.subcarriers = subcarriers      # (n_frames, n_sub)
         self.amplitudes = amplitudes        # (n_frames, n_sub)
@@ -105,6 +106,7 @@ class CsiWindowSnapshot:
         self.macs = macs                    # list[str | None]
         self.rssi = rssi                    # (n_frames,)
         self.agc_gains = agc_gains
+        self.noise_floors = noise_floors    # (n_frames,)
 
     @classmethod
     def from_frames(cls, frames: List[CsiFrame], n_sub: int) -> "CsiWindowSnapshot":
@@ -115,6 +117,7 @@ class CsiWindowSnapshot:
         rssi = np.zeros(n, dtype=np.float32)
         macs: List[Optional[str]] = []
         agc_gains = np.zeros(n, dtype=np.float32)
+        noise_floors = np.zeros(n, dtype=np.float32)
 
         for i, f in enumerate(frames):
             k = min(f.subcarriers.size, n_sub)
@@ -124,8 +127,9 @@ class CsiWindowSnapshot:
             rssi[i] = f.rssi if f.rssi is not None else np.nan
             macs.append(f.source_mac)
             agc_gains[i] = f.agc_gain_db if f.agc_gain_db is not None else np.nan
+            noise_floors[i] = f.noise_floor if f.noise_floor is not None else np.nan
 
-        return cls(sub, amp, ts, macs, rssi, agc_gains)
+        return cls(sub, amp, ts, macs, rssi, agc_gains, noise_floors)
 
     @property
     def shape(self) -> tuple[int, int]:

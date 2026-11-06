@@ -55,6 +55,7 @@ def latest():
         "macs": snap.macs,
         "amplitudes": snap.amplitudes.tolist(),
         "agc_gains": snap.agc_gains.tolist(),
+        "noise_floors": snap.noise_floors.tolist(),
     })
 
 
